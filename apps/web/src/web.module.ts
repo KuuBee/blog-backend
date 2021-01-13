@@ -3,9 +3,12 @@ import { WebController } from './web.controller';
 import { WebService } from './web.service';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './user/user.module';
+import { LibModule } from '@app/lib';
 
 @Module({
   imports: [
+    LibModule,
     AuthModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -13,10 +16,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       port: 5432,
       username: 'postgres',
       password: 'postgres',
-      database: 'nest_test',
-      entities: [],
-      synchronize: true,
+      database: 'blog',
+      // entities: [User],
+      // synchronize: true,
+      autoLoadEntities: true,
     }),
+    UserModule,
   ],
   controllers: [WebController],
   providers: [WebService],
