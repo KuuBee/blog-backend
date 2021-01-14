@@ -1,39 +1,30 @@
 import { DateService } from '@app/lib/date/date.service';
+import { CreateUserDTO } from '@app/lib/dto/user/cteate.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'shared/entity/user.entity';
+import { UserEntity } from '@app/lib/entity/user.entity';
 import { Repository } from 'typeorm';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private _usersRepository: Repository<User>,
-    private _dateService: DateService,
+    @InjectRepository(UserEntity)
+    private _usersRepository: Repository<UserEntity>,
   ) {}
-  findAll(): Promise<User[]> {
+  findAll(): Promise<UserEntity[]> {
     return this._usersRepository.find();
   }
-  findOne(id: string): Promise<User> {
-    // this._usersRepository.create()
-    // this._usersRepository.update()
-    // this._usersRepository.delete()
+  findOne(id: string): Promise<UserEntity> {
     return this._usersRepository.findOne(id);
   }
-  async create() {
-    const res = await this._usersRepository.insert({
-      name: 'test1',
-      password: 'test',
-      email: 'test',
-    });
-    return res;
+  async create(body: CreateUserDTO) {
+    body.password = await bcrypt.hash(body.password, 10);
+    await this._usersRepository.insert(body);
   }
   async update(id: number) {
     const updateOne = await this._usersRepository.findOne(id);
     updateOne.name = 'test2';
-    updateOne.updated_at = this._dateService.now();
-    // console.log('updateOne.updatedAt', new Date());
-    console.log('updateOne.updatedAt', this._dateService.now());
 
     return await this._usersRepository.save(updateOne);
   }
