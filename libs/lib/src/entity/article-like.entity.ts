@@ -1,10 +1,11 @@
 /*
- * @Descripttion: user 实体
+ * @Descripttion: articleLike 实体
  * @Author: 杨湛杰
- * @Date: 2021-01-13 09:55:21
+ * @Date: 2021-01-15 16:12:57
  * @LastEditors: 杨湛杰
- * @LastEditTime: 2021-01-15 15:51:37
+ * @LastEditTime: 2021-01-15 16:23:14
  */
+
 import {
   Entity,
   Column,
@@ -14,52 +15,36 @@ import {
 } from 'typeorm';
 import { DateService } from '@app/lib/date/date.service';
 
-export enum UserStatus {
+export enum ClassificationStatus {
   ENABLE = 'enable',
   DISABLE = 'disable',
 }
 @Entity({
-  name: 'user',
+  name: 'classification',
 })
-export class UserEntity {
+export class ArticleLike {
   @PrimaryGeneratedColumn({
+    name: 'article_like_id',
+    type: 'int',
+  })
+  articleLikeId: number;
+
+  @Column({
     name: 'user_id',
     type: 'int',
   })
   userId: number;
 
-  @Column()
-  name: string;
-
   @Column({
-    nullable: true,
-  })
-  avatar: string;
-
-  @Column()
-  password: string;
-
-  @Column()
-  email: string;
-
-  @Column({
-    default: () => 10,
-  })
-  level: number;
-
-  @Column({
-    type: 'enum',
-    enum: UserStatus,
-    default: () => UserStatus.ENABLE,
-  })
-  status: UserStatus;
-
-  @Column({
-    name: 'link_id',
+    name: 'article_id',
     type: 'int',
-    nullable: true,
   })
-  linkId: number;
+  articleId: number;
+
+  @Column({
+    type: 'int2',
+  })
+  type: number;
 
   @CreateDateColumn({
     name: 'created_at',

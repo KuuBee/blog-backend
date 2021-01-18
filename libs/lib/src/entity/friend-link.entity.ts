@@ -1,10 +1,11 @@
 /*
- * @Descripttion: user 实体
+ * @Descripttion: friend_link 实体
  * @Author: 杨湛杰
- * @Date: 2021-01-13 09:55:21
+ * @Date: 2021-01-15 16:12:57
  * @LastEditors: 杨湛杰
- * @LastEditTime: 2021-01-15 15:51:37
+ * @LastEditTime: 2021-01-15 16:47:44
  */
+
 import {
   Entity,
   Column,
@@ -14,52 +15,53 @@ import {
 } from 'typeorm';
 import { DateService } from '@app/lib/date/date.service';
 
-export enum UserStatus {
+export enum FriendLinkStatus {
   ENABLE = 'enable',
   DISABLE = 'disable',
+  UNDER_ERVIEW = 'under_review',
 }
 @Entity({
-  name: 'user',
+  name: 'friend_link',
 })
-export class UserEntity {
+export class FriendLinkEntity {
   @PrimaryGeneratedColumn({
+    name: 'link_id',
+    type: 'int',
+  })
+  linkId: number;
+
+  @Column({
     name: 'user_id',
     type: 'int',
   })
   userId: number;
 
-  @Column()
-  name: string;
+  @Column({
+    name: 'title',
+    length: 30,
+  })
+  title: string;
 
   @Column({
     nullable: true,
   })
-  avatar: string;
+  subtitle: string;
 
   @Column()
-  password: string;
-
-  @Column()
-  email: string;
-
-  @Column({
-    default: () => 10,
-  })
-  level: number;
+  link: string;
 
   @Column({
     type: 'enum',
-    enum: UserStatus,
-    default: () => UserStatus.ENABLE,
+    enum: FriendLinkStatus,
+    default: () => FriendLinkStatus.ENABLE,
   })
-  status: UserStatus;
+  status: FriendLinkStatus;
 
   @Column({
-    name: 'link_id',
-    type: 'int',
+    length: 20,
     nullable: true,
   })
-  linkId: number;
+  color: string;
 
   @CreateDateColumn({
     name: 'created_at',

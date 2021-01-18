@@ -1,8 +1,16 @@
 import { TestDto } from 'shared/dto/test';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Headers,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateAuthDTO } from '@app/lib/dto/auth/create.dto';
 import bcrypt from 'bcrypt';
+import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -12,6 +20,12 @@ export class AuthController {
   @Post()
   async create(@Body() body: CreateAuthDTO) {
     return this._authService.create(body);
+  }
+  @UseGuards(AuthGuard('jwt'))
+  @Get()
+  test() {
+    // return this._authService.test();
+    return 'success';
   }
   // @Post('register')
   // @ApiOperation({ summary: '注册' })

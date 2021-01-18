@@ -16,7 +16,7 @@ export class CreateUserDTO {
   })
   @IsNotEmpty()
   @IsString()
-  name!: string;
+  name: string;
 
   @ApiProperty({
     name: '头像',
@@ -33,7 +33,7 @@ export class CreateUserDTO {
   })
   @IsNotEmpty()
   @IsString()
-  password!: string;
+  password: string;
 
   @ApiProperty({
     name: '邮箱',
@@ -42,5 +42,5 @@ export class CreateUserDTO {
   @IsNotEmpty()
   @IsString()
   @IsEmail()
-  email!: string;
+  email: string;
 }

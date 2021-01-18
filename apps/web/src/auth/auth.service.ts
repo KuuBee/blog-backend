@@ -10,6 +10,7 @@ import { UserEntity } from '@app/lib/entity/user.entity';
 import { Repository } from 'typeorm';
 import bcrypt from 'bcrypt';
 import { ResponseService } from '@app/lib/response/response.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,7 @@ export class AuthService {
     @InjectRepository(UserEntity)
     private _usersRepository: Repository<UserEntity>,
     private _responseService: ResponseService,
+    private _jwtService: JwtService,
   ) {}
   async create(data: CreateAuthDTO) {
     const findOne = await this._usersRepository.findOne({
@@ -24,9 +26,18 @@ export class AuthService {
     });
     if (findOne) {
       if (await bcrypt.compare(data.password, findOne.password)) {
-        return findOne;
+        const payload = { username: findOne.name, sub: findOne.userId };
+        return this._responseService.success({
+          data: {
+            accessToken: this._jwtService.sign(payload),
+          },
+          message: '登陆成功',
+        });
       }
     }
-    throw this._responseService.error(HttpStatus.FORBIDDEN, '账号或密码不正确');
+    throw this._responseService.error({
+      code: HttpStatus.FORBIDDEN,
+      message: '账号或密码不正确',
+    });
   }
 }

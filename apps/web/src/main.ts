@@ -10,7 +10,12 @@ import { HttpExceptionFilter } from '@app/lib/http-exception.filter';
 import { LoggingInterceptor } from '@app/lib/logging.interceptor';
 
 async function bootstrap() {
-  const app = await NestFactory.create(WebModule);
+  const app = await NestFactory.create(WebModule, {
+    cors: {
+      origin: '*',
+      methods: '*',
+    },
+  });
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('/api/blog');
   app.useGlobalFilters(new HttpExceptionFilter());

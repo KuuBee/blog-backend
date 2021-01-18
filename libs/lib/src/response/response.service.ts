@@ -1,24 +1,37 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
+export interface SuccessType<T> {
+  data: T;
+  message?: string;
+  statusCode?: number;
+}
 @Injectable()
 export class ResponseService {
-  success<T = any>(data: T, message = 'success', statusCode = 200) {
+  success<T = any>({
+    data,
+    message,
+    statusCode,
+  }: SuccessType<T>): Required<SuccessType<T>> {
     return {
-      message,
-      statusCode,
+      statusCode: statusCode ?? 200,
+      message: message ?? 'success',
       data,
     };
   }
-  error<T = any>(
-    code: HttpStatus,
-    message: string | string[] = 'error',
-    data: T | null = null,
-  ) {
+  error<T = any>({
+    code,
+    message,
+    data,
+  }: {
+    code: HttpStatus;
+    message?: string | string[];
+    data?: T;
+  }) {
     return new HttpException(
       {
-        message,
+        message: message ?? 'error',
         statusCode: code,
-        data,
+        data: data ?? null,
       },
       code,
     );
