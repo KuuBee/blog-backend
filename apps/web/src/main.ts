@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { WebModule } from './web.module';
-import { HttpException, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 
 import dayjs from 'dayjs';
 import isLeapYear from 'dayjs/plugin/isLeapYear'; // 导入插件

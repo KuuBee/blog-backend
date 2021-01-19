@@ -11,6 +11,7 @@ import { Repository } from 'typeorm';
 import bcrypt from 'bcrypt';
 import { ResponseService } from '@app/lib/response/response.service';
 import { JwtService } from '@nestjs/jwt';
+import { find } from 'rxjs/operators';
 
 @Injectable()
 export class AuthService {
@@ -27,9 +28,12 @@ export class AuthService {
     if (findOne) {
       if (await bcrypt.compare(data.password, findOne.password)) {
         const payload = { username: findOne.name, sub: findOne.userId };
+        const { name, avatar } = findOne;
         return this._responseService.success({
           data: {
             accessToken: this._jwtService.sign(payload),
+            name,
+            avatar,
           },
           message: '登陆成功',
         });
