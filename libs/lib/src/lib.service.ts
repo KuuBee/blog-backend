@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class LibService {
   constructor(private _configService: ConfigService) {}
-  isDev() {
+  get isDev(): boolean {
     return this._configService.get<string>('ENVIRONMENT') === 'dev';
   }
   isProd() {

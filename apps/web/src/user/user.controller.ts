@@ -59,7 +59,7 @@ export class UserController {
           rejecet(err);
         } else {
           reslove({
-            message: 'success',
+            message: `写入成功位置: ${writePath}`,
             code: 200,
           });
         }
