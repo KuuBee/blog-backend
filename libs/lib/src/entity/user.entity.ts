@@ -3,7 +3,7 @@
  * @Author: 杨湛杰
  * @Date: 2021-01-13 09:55:21
  * @LastEditors: 杨湛杰
- * @LastEditTime: 2021-01-15 15:51:37
+ * @LastEditTime: 2021-01-22 17:16:26
  */
 import {
   Entity,
@@ -12,7 +12,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { DateService } from '@app/lib/date/date.service';
+import { DateService } from '@app/lib/service/date.service';
 
 export enum UserStatus {
   ENABLE = 'enable',
@@ -64,36 +64,22 @@ export class UserEntity {
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamptz',
-    transformer: {
-      from(val) {
-        return DateService.format(val);
-      },
-      to() {
-        return null;
-      },
-    },
+    transformer: DateService.transformer(),
   })
-  createdAt: string;
+  createdAt: Date;
 
   @UpdateDateColumn({
     name: 'updated_at',
     type: 'timestamptz',
     nullable: true,
-    transformer: {
-      from(val) {
-        return DateService.format(val);
-      },
-      to() {
-        return null;
-      },
-    },
+    transformer: DateService.transformer(),
   })
-  updatedAt: string;
+  updatedAt: Date;
 
   @Column({
     name: 'delete_at',
     type: 'timestamptz',
     nullable: true,
   })
-  deleteAt: string;
+  deleteAt: Date;
 }

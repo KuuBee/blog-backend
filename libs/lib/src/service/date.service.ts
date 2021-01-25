@@ -12,4 +12,14 @@ export class DateService {
   static format(date: Date, format = 'YYYY-MM-DD HH:mm:ss') {
     return dayjs(date).format(format);
   }
+  static transformer() {
+    return {
+      from(val) {
+        return val ? DateService.format(val) : null;
+      },
+      to() {
+        return new Date();
+      },
+    };
+  }
 }

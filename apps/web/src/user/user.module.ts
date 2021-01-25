@@ -4,6 +4,7 @@ import { UserEntity } from '@app/lib/entity/user.entity';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { LibModule } from '@app/lib';
+import { AuthService } from '../auth/auth.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity]), LibModule],

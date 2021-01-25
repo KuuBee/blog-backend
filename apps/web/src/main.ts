@@ -6,8 +6,9 @@ import { ValidationPipe } from '@nestjs/common';
 import dayjs from 'dayjs';
 import isLeapYear from 'dayjs/plugin/isLeapYear'; // 导入插件
 import 'dayjs/locale/zh-cn'; // 导入本地化语言
-import { HttpExceptionFilter } from '@app/lib/http-exception.filter';
-import { LoggingInterceptor } from '@app/lib/logging.interceptor';
+import { HttpExceptionFilter } from '@app/lib/filter/http-exception.filter';
+import { LoggingInterceptor } from '@app/lib/interceptor/logging.interceptor';
+import { DecryptMiddleware } from '@app/lib/middleware/decrypt.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(WebModule, {

@@ -8,7 +8,7 @@ export class WebController {
   constructor(private readonly webService: WebService) {}
 
   @Get()
-  getHello(): string {
+  getHello() {
     return this.webService.getHello();
   }
 }

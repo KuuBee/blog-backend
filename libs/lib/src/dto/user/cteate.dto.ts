@@ -6,7 +6,6 @@
  * @LastEditTime: 2021-01-14 09:55:00
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { UserStatus } from '@app/lib/entity/user.entity';
 import { IsOptional, IsNotEmpty, IsString, IsEmail } from 'class-validator';
 
 export class CreateUserDTO {
@@ -20,12 +19,18 @@ export class CreateUserDTO {
 
   @ApiProperty({
     name: '头像',
-    example: 'baidu.com',
-    nullable: false,
+    nullable: true,
+  })
+  @IsOptional()
+  avatar?: string;
+
+  @ApiProperty({
+    name: '默认头像地址',
+    nullable: true,
   })
   @IsOptional()
   @IsString()
-  avatar?: string;
+  defaultAvatar?: string;
 
   @ApiProperty({
     name: '密码',

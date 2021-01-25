@@ -13,7 +13,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { DateService } from '@app/lib/date/date.service';
+import { DateService } from '@app/lib/service/date.service';
 
 export enum CommentStatus {
   ENABLE = 'enable',

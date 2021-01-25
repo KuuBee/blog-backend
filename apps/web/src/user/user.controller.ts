@@ -32,16 +32,22 @@ export class UserController {
     return this._userService.findAll();
   }
   @Post()
+  @UseInterceptors(FileInterceptor('avatar'))
   @ApiOperation({ summary: '注册' })
-  async create(@Body() body: CreateUserDTO) {
-    await this._userService.create(body);
-    return {
-      message: 'success',
-    };
+  async create(
+    @Body() body: CreateUserDTO,
+    @UploadedFile() avatar: GlobalType.UploadFile,
+  ) {
+    // await ;
+    return this._userService.create(body, avatar);
   }
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
-  async upload(@UploadedFile() file: GlobalType.UploadFile) {
+  async upload(@Body() body: any, @UploadedFile() file: GlobalType.UploadFile) {
+    console.log({ ...body });
+    console.log(file);
+    return;
+
     let writePath: string;
     if (this._libService.isDev) {
       writePath = `${__dirname}/${file.originalname}`;
