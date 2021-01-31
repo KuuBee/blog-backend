@@ -14,4 +14,7 @@ export namespace GlobalType {
     mimetype: string;
     size: number;
   }
+  export interface StrKeyObj {
+    [key: string]: any;
+  }
 }

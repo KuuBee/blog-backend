@@ -1,29 +1,21 @@
-import path from 'path';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { WebController } from './web.controller';
 import { WebService } from './web.service';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { LibModule } from '@app/lib';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
+import { DecryptMiddleware } from '@app/lib/middleware/decrypt.middleware';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { CryptInterceptor } from '@app/lib/interceptor/crypt.interceptor';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Module({
   imports: [
     LibModule,
     AuthModule,
     UserModule,
-    // TypeOrmModule.forRoot({
-    //   type: 'postgres',
-    //   host: 'localhost',
-    //   port: 5432,
-    //   username: 'postgres',
-    //   password: 'postgres',
-    //   database: 'blog',
-    //   // entities: [User],
-    //   // synchronize: true,
-    //   autoLoadEntities: true,
-    // }),
     TypeOrmModule.forRootAsync({
       imports: [LibModule],
       useFactory: (configService: ConfigService) => ({
@@ -39,6 +31,24 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
   ],
   controllers: [WebController],
-  providers: [WebService],
+  providers: [
+    WebService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: FileInterceptor('file', {
+        limits: {
+          fieldSize: 150,
+        },
+      }),
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CryptInterceptor,
+    },
+  ],
 })
-export class WebModule {}
+export class WebModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(DecryptMiddleware).forRoutes('*');
+  }
+}

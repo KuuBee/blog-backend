@@ -19,7 +19,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/blog/test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/blog/test/jest-e2e.json",
+    "start:redis":"./Users/kuubee/Desktop/dev/redis-6.0.6/src/redis-server"
   },
   "dependencies": {
     "@nestjs/common": "^7.5.1",
@@ -54,6 +55,7 @@
     "@types/express": "^4.17.8",
     "@types/jest": "^26.0.15",
     "@types/lodash": "^4.14.168",
+    "@types/multer": "^1.4.5",
     "@types/node": "^14.14.6",
     "@types/node-rsa": "^1.0.0",
     "@types/passport-jwt": "^3.0.3",

@@ -1,9 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
-export interface SuccessType<T> {
+export interface SuccessType<T = any> {
   data: T;
   message?: string;
   statusCode?: number;
+}
+export interface ErrorType<T = any> {
+  code: HttpStatus;
+  message?: string | string[];
+  data?: T;
 }
 @Injectable()
 export class ResponseService {
@@ -18,15 +23,13 @@ export class ResponseService {
       data,
     };
   }
-  error<T = any>({
-    code,
-    message,
-    data,
-  }: {
-    code: HttpStatus;
-    message?: string | string[];
-    data?: T;
-  }) {
+
+  /**
+   * @description: 发送错误信息
+   * @param {ErrorType} data 错误信息
+   * @return {HttpException}
+   */
+  error<T = any>({ code, message, data }: ErrorType) {
     return new HttpException(
       {
         message: message ?? 'error',
