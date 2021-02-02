@@ -4,7 +4,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AdminModule);
-  app.setGlobalPrefix('/api/blog');
+  app.setGlobalPrefix('/api/admin/blog');
 
   const options = new DocumentBuilder()
     .setTitle('博客admin端api')

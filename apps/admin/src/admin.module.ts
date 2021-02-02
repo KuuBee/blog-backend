@@ -1,9 +1,29 @@
+import { LibModule } from '@app/lib';
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [],
+  imports: [
+    LibModule,
+    TypeOrmModule.forRootAsync({
+      imports: [LibModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('HOST'),
+        port: parseInt(configService.get<string>('PORT')),
+        username: configService.get<string>('NAME'),
+        password: configService.get<string>('PASSWROD'),
+        database: configService.get<string>('DB_NAME'),
+        autoLoadEntities: true,
+      }),
+      inject: [ConfigService],
+    }),
+    AuthModule,
+  ],
   controllers: [AdminController],
   providers: [AdminService],
 })
