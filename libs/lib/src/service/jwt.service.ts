@@ -24,16 +24,13 @@ export class LibJwtService extends PassportStrategy(Strategy) {
     return { userId: payload.sub, username: payload.username };
   }
 
-  createToken(findOne: UserEntity, successMessage = '登陆成功') {
+  createToken(findOne: UserEntity) {
     const payload = { username: findOne.name, sub: findOne.userId };
     const { name, avatar } = findOne;
-    return this._responseService.success({
-      data: {
-        accessToken: this._jwtService.sign(payload),
-        name,
-        avatar,
-      },
-      message: successMessage,
-    });
+    return {
+      accessToken: this._jwtService.sign(payload),
+      name,
+      avatar,
+    };
   }
 }

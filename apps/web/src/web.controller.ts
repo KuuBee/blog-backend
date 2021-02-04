@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { identity } from 'lodash';
 import { WebService } from './web.service';
 
 @Controller()

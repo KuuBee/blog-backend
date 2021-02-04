@@ -1,8 +1,8 @@
 /*
  * @Descripttion:
- * @Author: 杨湛杰
+ * @Author: KuuBee
  * @Date: 2021-01-13 16:36:45
- * @LastEditors: 杨湛杰
+ * @LastEditors: KuuBee
  * @LastEditTime: 2021-01-13 16:36:46
  */
 import { IsNotEmpty, IsString } from 'class-validator';

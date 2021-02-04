@@ -1,8 +1,8 @@
 /*
  * @Descripttion: 解密中间件
- * @Author: 杨湛杰
+ * @Author: KuuBee
  * @Date: 2021-01-25 11:06:12
- * @LastEditors: 杨湛杰
+ * @LastEditors: KuuBee
  * @LastEditTime: 2021-01-28 15:52:20
  */
 import { Injectable, NestMiddleware } from '@nestjs/common';

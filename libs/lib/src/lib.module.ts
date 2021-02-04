@@ -9,6 +9,7 @@ import { UtilsService } from './service/utils.service';
 import { JwtModule } from '@nestjs/jwt';
 import { CryptoService } from './service/crypto/crypto.service';
 import { CryptInterceptor } from './interceptor/crypt.interceptor';
+import { PaginationService } from './service/pagination/pagination.service';
 
 // TODO jwt密钥需要隐藏
 const secret = 'secretKey';
@@ -32,6 +33,7 @@ const SERVICE = [
   UtilsService,
   CryptoService,
   CryptInterceptor,
+  PaginationService,
 ];
 @Module({
   imports: [...MODULE],

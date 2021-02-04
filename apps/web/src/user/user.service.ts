@@ -74,13 +74,12 @@ export class UserService {
 
     const insertOne = await this._usersRepository.insert(createOne);
     // 创建完毕 生成token
-    return this._libJwtService.createToken(
-      {
+    return this._responseService.success({
+      data: this._libJwtService.createToken({
         ...createOne,
         userId: insertOne.identifiers[0].userId,
-      } as UserEntity,
-      '注册成功',
-    );
+      } as UserEntity),
+    });
   }
 
   // TODO 需要删除

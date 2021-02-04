@@ -1,8 +1,8 @@
 /*
  * @Descripttion: 加密服务
- * @Author: 杨湛杰
+ * @Author: KuuBee
  * @Date: 2021-01-26 11:46:32
- * @LastEditors: 杨湛杰
+ * @LastEditors: KuuBee
  * @LastEditTime: 2021-01-27 15:31:54
  */
 import { Injectable } from '@nestjs/common';

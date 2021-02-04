@@ -1,9 +1,9 @@
 /*
  * @Descripttion: 创建用户
- * @Author: 杨湛杰
+ * @Author: KuuBee
  * @Date: 2021-01-13 16:53:42
- * @LastEditors: 杨湛杰
- * @LastEditTime: 2021-01-14 09:55:00
+ * @LastEditors: KuuBee
+ * @LastEditTime: 2021-02-04 14:48:47
  */
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsNotEmpty, IsString, IsEmail } from 'class-validator';

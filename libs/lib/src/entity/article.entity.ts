@@ -1,8 +1,8 @@
 /*
  * @Descripttion: article 实体
- * @Author: 杨湛杰
+ * @Author: KuuBee
  * @Date: 2021-01-13 09:55:21
- * @LastEditors: 杨湛杰
+ * @LastEditors: KuuBee
  * @LastEditTime: 2021-01-17 14:44:22
  */
 import {

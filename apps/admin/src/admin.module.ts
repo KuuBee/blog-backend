@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
 import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
+import { AssetsModule } from './assets/assets.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { AuthModule } from './auth/auth.module';
       inject: [ConfigService],
     }),
     AuthModule,
+    UserModule,
+    AssetsModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],
