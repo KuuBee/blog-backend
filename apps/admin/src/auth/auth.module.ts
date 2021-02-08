@@ -6,7 +6,7 @@ import { AuthService } from './auth.service';
 
 @Module({
   imports: [LibModule, ...ALL_ENTITY],
-  providers: [AuthService, LibJwtService],
+  providers: [AuthService],
   controllers: [AuthController],
 })
 export class AuthModule {}

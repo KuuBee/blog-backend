@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-01-13 09:55:21
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-01-17 14:44:22
+ * @LastEditTime: 2021-02-05 16:36:10
  */
 import {
   Entity,
@@ -81,14 +81,7 @@ export class ArticleEntity {
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamptz',
-    transformer: {
-      from(val) {
-        return DateService.format(val);
-      },
-      to() {
-        return null;
-      },
-    },
+    transformer: DateService.transformer(),
   })
   createdAt: string;
 
@@ -96,14 +89,7 @@ export class ArticleEntity {
     name: 'updated_at',
     type: 'timestamptz',
     nullable: true,
-    transformer: {
-      from(val) {
-        return DateService.format(val);
-      },
-      to() {
-        return null;
-      },
-    },
+    transformer: DateService.transformer(),
   })
   updatedAt: string;
 

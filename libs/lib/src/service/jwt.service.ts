@@ -19,9 +19,17 @@ export class LibJwtService extends PassportStrategy(Strategy) {
     });
   }
 
+  /**
+   * @description: 验证当前token是否为有效值，如果返回falsely即为验证失败，反之亦然
+   * @param {any} payload
+   * @return {boolean}
+   */
   async validate(payload: any) {
+    // TODO 增加token缓存
+    // 为了实现登陆更新token的问题
     // 如果token解码成功就会走到这里
     return { userId: payload.sub, username: payload.username };
+    // return null;
   }
 
   createToken(findOne: UserEntity) {

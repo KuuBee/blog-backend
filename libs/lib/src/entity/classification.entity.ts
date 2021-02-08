@@ -33,6 +33,12 @@ export class ClassificationEntity {
   content: string;
 
   @Column({
+    type: 'int4',
+    default: () => 0,
+  })
+  count: number;
+
+  @Column({
     type: 'enum',
     enum: ClassificationStatus,
     default: () => ClassificationStatus.ENABLE,
@@ -42,14 +48,7 @@ export class ClassificationEntity {
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamptz',
-    transformer: {
-      from(val) {
-        return DateService.format(val);
-      },
-      to() {
-        return null;
-      },
-    },
+    transformer: DateService.transformer(),
   })
   createdAt: string;
 
@@ -57,14 +56,7 @@ export class ClassificationEntity {
     name: 'updated_at',
     type: 'timestamptz',
     nullable: true,
-    transformer: {
-      from(val) {
-        return DateService.format(val);
-      },
-      to() {
-        return null;
-      },
-    },
+    transformer: DateService.transformer(),
   })
   updatedAt: string;
 

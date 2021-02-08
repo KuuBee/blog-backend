@@ -11,12 +11,12 @@ import { LibJwtService } from '@app/lib/service/jwt.service';
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
-    private _usersRepository: Repository<UserEntity>,
+    private _userRepository: Repository<UserEntity>,
     private _responseService: ResponseService,
     private _libJwtService: LibJwtService,
   ) {}
   async create(data: CreateAuthDTO) {
-    const findOne = await this._usersRepository.findOne({
+    const findOne = await this._userRepository.findOne({
       name: data.name,
     });
     if (findOne) {

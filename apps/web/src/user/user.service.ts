@@ -16,7 +16,7 @@ import { LibJwtService } from '@app/lib/service/jwt.service';
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
-    private _usersRepository: Repository<UserEntity>,
+    private _userRepository: Repository<UserEntity>,
     private _responseService: ResponseService,
     private _utilsService: UtilsService,
     private _libService: LibService,
@@ -27,19 +27,19 @@ export class UserService {
 
   // TODO 需要删除
   async findAll() {
-    const data = await this._usersRepository.find();
+    const data = await this._userRepository.find();
     return this._responseService.success({
       data,
     });
   }
   // TODO 需要删除
   findOne(id: string): Promise<UserEntity> {
-    return this._usersRepository.findOne(id);
+    return this._userRepository.findOne(id);
   }
 
   // 创建
   async create(body: CreateUserDTO, file: GlobalType.UploadFile) {
-    const findOne = await this._usersRepository
+    const findOne = await this._userRepository
       .createQueryBuilder('user')
       .where('user.name = :name', { name: body.name })
       .orWhere('user.email = :email', { email: body.email })
@@ -72,7 +72,7 @@ export class UserService {
     };
     console.log('createOne', createOne);
 
-    const insertOne = await this._usersRepository.insert(createOne);
+    const insertOne = await this._userRepository.insert(createOne);
     // 创建完毕 生成token
     return this._responseService.success({
       data: this._libJwtService.createToken({
@@ -84,9 +84,9 @@ export class UserService {
 
   // TODO 需要删除
   async update(id: number) {
-    const updateOne = await this._usersRepository.findOne(id);
+    const updateOne = await this._userRepository.findOne(id);
     updateOne.name = 'test4' + this.testId;
     this.testId += 1;
-    return await this._usersRepository.save(updateOne);
+    return await this._userRepository.save(updateOne);
   }
 }

@@ -7,4 +7,4 @@
  */
 import { PaginationDTO } from '../pagination';
 
-export class UserIndexDTO extends PaginationDTO {}
+export class IndexUserDTO extends PaginationDTO {}

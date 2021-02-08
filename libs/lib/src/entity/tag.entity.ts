@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-01-15 16:12:57
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-01-15 16:51:17
+ * @LastEditTime: 2021-02-05 13:50:59
  */
 
 import {
@@ -39,17 +39,15 @@ export class TagEntity {
   })
   status: TagStatus;
 
+  @Column({
+    type: 'int4',
+  })
+  count: number;
+
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamptz',
-    transformer: {
-      from(val) {
-        return DateService.format(val);
-      },
-      to() {
-        return null;
-      },
-    },
+    transformer: DateService.transformer(),
   })
   createdAt: string;
 
@@ -57,14 +55,7 @@ export class TagEntity {
     name: 'updated_at',
     type: 'timestamptz',
     nullable: true,
-    transformer: {
-      from(val) {
-        return DateService.format(val);
-      },
-      to() {
-        return null;
-      },
-    },
+    transformer: DateService.transformer(),
   })
   updatedAt: string;
 

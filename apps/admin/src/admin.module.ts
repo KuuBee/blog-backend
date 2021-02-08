@@ -7,6 +7,9 @@ import { AdminService } from './admin.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { AssetsModule } from './assets/assets.module';
+import { TagModule } from './tag/tag.module';
+import { ClassificationModule } from './classification/classification.module';
+import { ArticleModule } from './article/article.module';
 
 @Module({
   imports: [
@@ -27,6 +30,9 @@ import { AssetsModule } from './assets/assets.module';
     AuthModule,
     UserModule,
     AssetsModule,
+    TagModule,
+    ClassificationModule,
+    ArticleModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],

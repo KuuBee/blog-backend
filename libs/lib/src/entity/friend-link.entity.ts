@@ -66,14 +66,7 @@ export class FriendLinkEntity {
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamptz',
-    transformer: {
-      from(val) {
-        return DateService.format(val);
-      },
-      to() {
-        return null;
-      },
-    },
+    transformer: DateService.transformer(),
   })
   createdAt: string;
 
@@ -81,14 +74,7 @@ export class FriendLinkEntity {
     name: 'updated_at',
     type: 'timestamptz',
     nullable: true,
-    transformer: {
-      from(val) {
-        return DateService.format(val);
-      },
-      to() {
-        return null;
-      },
-    },
+    transformer: DateService.transformer(),
   })
   updatedAt: string;
 

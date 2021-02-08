@@ -1,4 +1,4 @@
-import { UserIndexDTO } from '@app/lib/dto/user/index.dto';
+import { IndexUserDTO } from '@app/lib/dto/user/index.dto';
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
@@ -12,7 +12,7 @@ export class UserController {
   @ApiOperation({ summary: '用户列表' })
   @Get()
   @UseGuards(AuthGuard('jwt'))
-  index(@Query() data: UserIndexDTO) {
+  index(@Query() data: IndexUserDTO) {
     return this._userService.index(data);
   }
 }
