@@ -36,6 +36,7 @@ export class CryptInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       concatMap((val) => {
+        console.log('返回值', val);
         // 如果返回值为文件则不进行加密
         if (val instanceof Buffer) {
           return of(val);

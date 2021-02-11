@@ -21,7 +21,9 @@ export class AuthService {
     });
     if (findOne) {
       if (await bcrypt.compare(data.password, findOne.password)) {
-        return this._libJwtService.createToken(findOne);
+        return this._responseService.success({
+          data: this._libJwtService.createToken(findOne),
+        });
       }
     }
     throw this._responseService.error({

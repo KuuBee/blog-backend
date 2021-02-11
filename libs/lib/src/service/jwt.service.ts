@@ -32,7 +32,7 @@ export class LibJwtService extends PassportStrategy(Strategy) {
     // return null;
   }
 
-  createToken(findOne: UserEntity) {
+  createToken(findOne: Pick<UserEntity, 'name' | 'userId' | 'avatar'>) {
     const payload = { username: findOne.name, sub: findOne.userId };
     const { name, avatar } = findOne;
     return {

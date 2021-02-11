@@ -1,5 +1,6 @@
+import { CreateAdminUserDTO } from '@app/lib/dto/user/cteate.dto';
 import { IndexUserDTO } from '@app/lib/dto/user/index.dto';
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { UserService } from './user.service';
@@ -14,5 +15,10 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'))
   index(@Query() data: IndexUserDTO) {
     return this._userService.index(data);
+  }
+
+  @Post()
+  create(@Body() body: CreateAdminUserDTO) {
+    return this._userService.create(body);
   }
 }

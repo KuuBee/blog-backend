@@ -6,7 +6,7 @@ export interface SuccessType<T = any> {
   statusCode?: number;
 }
 export interface ErrorType<T = any> {
-  code: HttpStatus;
+  code?: HttpStatus;
   message?: string | string[];
   data?: T;
 }
@@ -31,10 +31,10 @@ export class ResponseService {
     throw new HttpException(
       {
         message: message ?? 'error',
-        statusCode: code,
+        statusCode: code ?? HttpStatus.BAD_REQUEST,
         data: data ?? null,
       },
-      code,
+      code ?? HttpStatus.BAD_REQUEST,
     );
   }
 }

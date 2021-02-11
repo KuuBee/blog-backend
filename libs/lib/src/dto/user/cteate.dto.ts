@@ -49,3 +49,9 @@ export class CreateUserDTO {
   @IsEmail()
   email: string;
 }
+
+export class CreateAdminUserDTO extends CreateUserDTO {
+  @IsNotEmpty()
+  @IsString()
+  vipCode: string;
+}
