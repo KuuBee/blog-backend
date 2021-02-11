@@ -6,7 +6,6 @@ import { ResponseService } from '@app/lib/service/response.service';
 import compressing from 'compressing';
 import { GlobalType } from '@app/lib/interface';
 import { ImageUrlTransformPipe } from '@app/lib/pipe/fs-markdown.pipe';
-import { ConfigService } from '@nestjs/config';
 import { EnvService } from '@app/lib/service/env/env.service';
 
 @Injectable()
@@ -19,11 +18,11 @@ export class ArticleService {
     console.log(file);
 
     let mdFileName: string;
+    const dirName = file.originalname.replace(/\.(zip)$/gi, '');
     // 默认替换图片地址
     const imageReplaceUrl = this._envService.isDev
       ? 'https://cc/bb/'
-      : 'https://autocode.icu/assets/markdown/';
-    const dirName = file.originalname.replace(/\.(zip)$/gi, '');
+      : `https://autocode.icu/assets/markdown/${dirName}/`;
     // 默认md根目录
     const mdPath = this._envService.isDev
       ? // 开发目录
@@ -57,6 +56,7 @@ export class ArticleService {
     const baseMdPath = path.join(readMdPath, `./${mdFileName}`);
     // 创建 md 读取流
     const readable = fs.createReadStream(baseMdPath);
+    // 转写的目标文件
     const targetMdPath = path.join(readMdPath, `./t-2.md`);
     try {
       await fsP.access(targetMdPath, fs.constants.F_OK);
@@ -72,7 +72,7 @@ export class ArticleService {
         });
       }
       // 需要目录不存在
-      console.log('yes', error);
+      // console.log('yes', error);
     }
     // 创建 md 写入流
     const writeable = fs.createWriteStream(targetMdPath);
@@ -80,7 +80,8 @@ export class ArticleService {
     const imageUrlTransformPipe = new ImageUrlTransformPipe(imageReplaceUrl);
     // 写入成功 准备删除原md文件
     readable.pipe(imageUrlTransformPipe).pipe(writeable);
-    await fsP.rm(baseMdPath);
+    // 删除基础md
+    await fsP.unlink(baseMdPath);
     return 'success';
   }
 }

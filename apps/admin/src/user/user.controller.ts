@@ -17,8 +17,8 @@ export class UserController {
     return this._userService.index(data);
   }
 
-  @Post()
-  create(@Body() body: CreateAdminUserDTO) {
-    return this._userService.create(body);
-  }
+  // @Post()
+  // create(@Body() body: CreateAdminUserDTO) {
+  //   return this._userService.create(body);
+  // }
 }
