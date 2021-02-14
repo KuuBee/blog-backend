@@ -27,7 +27,13 @@ export class ResponseService {
    * @param {ErrorType} data 错误信息
    * @return {HttpException}
    */
-  error({ code, message, data }: ErrorType) {
+  error(
+    { code, message, data }: ErrorType = {
+      code: HttpStatus.BAD_REQUEST,
+      message: 'error',
+      data: null,
+    },
+  ) {
     throw new HttpException(
       {
         message: message ?? 'error',

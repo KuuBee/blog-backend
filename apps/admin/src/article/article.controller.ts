@@ -1,10 +1,15 @@
+import { CreateArticleDTO } from '@app/lib/dto/article/create.dto';
+import { IndexArticleDTO } from '@app/lib/dto/article/index.dto';
 import { GlobalType } from '@app/lib/interface';
 import { ResponseService } from '@app/lib/service/response.service';
 import {
+  Body,
   Controller,
+  Get,
   HttpException,
   HttpStatus,
   Post,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -19,6 +24,7 @@ export class ArticleController {
     private _articleService: ArticleService,
     private _responseService: ResponseService,
   ) {}
+
   @Post()
   @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(
@@ -35,7 +41,16 @@ export class ArticleController {
       },
     }),
   )
-  create(@UploadedFile() file: GlobalType.UploadFile) {
-    return this._articleService.create(file);
+  create(
+    @UploadedFile() file: GlobalType.UploadFile,
+    @Body() body: CreateArticleDTO,
+  ) {
+    return this._articleService.create(file, body);
+  }
+
+  @Get()
+  @UseGuards(AuthGuard('jwt'))
+  index(@Query() query: IndexArticleDTO) {
+    return this._articleService.index(query);
   }
 }

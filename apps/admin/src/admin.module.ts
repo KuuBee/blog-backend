@@ -10,6 +10,7 @@ import { AssetsModule } from './assets/assets.module';
 import { TagModule } from './tag/tag.module';
 import { ClassificationModule } from './classification/classification.module';
 import { ArticleModule } from './article/article.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ArticleModule } from './article/article.module';
     TagModule,
     ClassificationModule,
     ArticleModule,
+    SearchModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],

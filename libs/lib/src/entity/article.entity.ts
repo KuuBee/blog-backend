@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-01-13 09:55:21
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-02-05 16:36:10
+ * @LastEditTime: 2021-02-14 21:20:58
  */
 import {
   Entity,
@@ -11,8 +11,15 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
+  JoinColumn,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { DateService } from '@app/lib/service/date.service';
+import { ClassificationEntity } from './classification.entity';
+import { TagEntity } from './tag.entity';
 
 export enum ArticleStatus {
   ENABLE = 'enable',
@@ -43,6 +50,11 @@ export class ArticleEntity {
   })
   classificationId: number;
 
+  // 映射关系
+  @OneToOne(() => ClassificationEntity)
+  @JoinColumn({ name: 'classification_id' })
+  classification: ClassificationEntity;
+
   @Column({
     name: 'tag_id',
     type: 'int',
@@ -51,6 +63,10 @@ export class ArticleEntity {
   })
   tagId: number[];
 
+  @ManyToMany(() => TagEntity, (tag) => tag.article)
+  @JoinTable()
+  tag: TagEntity[];
+
   @Column({
     type: 'enum',
     enum: ArticleStatus,
@@ -58,11 +74,11 @@ export class ArticleEntity {
   })
   status: ArticleStatus;
 
-  @Column({
-    name: 'link_id',
-    type: 'int',
-  })
-  linkId: number;
+  // @Column({
+  //   name: 'link_id',
+  //   type: 'int',
+  // })
+  // linkId: number;
 
   @Column({
     name: 'like_count',

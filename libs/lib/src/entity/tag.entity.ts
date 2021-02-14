@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-01-15 16:12:57
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-02-05 13:50:59
+ * @LastEditTime: 2021-02-14 16:56:33
  */
 
 import {
@@ -12,8 +12,12 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { DateService } from '@app/lib/service/date.service';
+import { ArticleEntity } from './article.entity';
 
 export enum TagStatus {
   ENABLE = 'enable',
@@ -65,4 +69,7 @@ export class TagEntity {
     nullable: true,
   })
   deleteAt: string;
+
+  @ManyToMany(() => ArticleEntity, (article) => article.tag)
+  article: ArticleEntity[];
 }
