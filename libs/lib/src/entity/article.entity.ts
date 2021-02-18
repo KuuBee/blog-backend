@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-01-13 09:55:21
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-02-14 21:20:58
+ * @LastEditTime: 2021-02-18 14:16:38
  */
 import {
   Entity,
@@ -53,7 +53,7 @@ export class ArticleEntity {
   // 映射关系
   @OneToOne(() => ClassificationEntity)
   @JoinColumn({ name: 'classification_id' })
-  classification: ClassificationEntity;
+  classification?: ClassificationEntity;
 
   @Column({
     name: 'tag_id',
@@ -63,22 +63,12 @@ export class ArticleEntity {
   })
   tagId: number[];
 
-  @ManyToMany(() => TagEntity, (tag) => tag.article)
-  @JoinTable()
-  tag: TagEntity[];
-
   @Column({
     type: 'enum',
     enum: ArticleStatus,
     default: () => ArticleStatus.ENABLE,
   })
   status: ArticleStatus;
-
-  // @Column({
-  //   name: 'link_id',
-  //   type: 'int',
-  // })
-  // linkId: number;
 
   @Column({
     name: 'like_count',

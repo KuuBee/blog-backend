@@ -69,7 +69,4 @@ export class TagEntity {
     nullable: true,
   })
   deleteAt: string;
-
-  @ManyToMany(() => ArticleEntity, (article) => article.tag)
-  article: ArticleEntity[];
 }

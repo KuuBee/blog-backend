@@ -13,8 +13,8 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IndexArticleDTO } from '@app/lib/dto/article/index.dto';
 import { PaginationService } from '@app/lib/service/pagination/pagination.service';
-import { TagEntity } from '@app/lib/entity/tag.entity';
-
+import { execSync } from 'child_process';
+import { UpdateArticleDTO } from '@app/lib/dto/article/update.dto';
 @Injectable()
 export class ArticleService {
   constructor(
@@ -26,13 +26,6 @@ export class ArticleService {
   ) {}
 
   async index({ page, pageSize }: IndexArticleDTO) {
-    console.log(
-      this._articleRepository
-        .createQueryBuilder('articl')
-        .leftJoinAndSelect('articl.tag', 'tag')
-        .getQuery(),
-    );
-
     const res = await this._paginationService.pagination({
       queryBuilder: this._articleRepository
         .createQueryBuilder('articl')
@@ -43,14 +36,13 @@ export class ArticleService {
           'classification.classificationId',
           'classification.content',
           'articl.tagId',
-          // 'tag.tagId',
           'articl.status',
           'articl.likeCount',
           'articl.createdAt',
           'articl.updatedAt',
         ])
         .innerJoin('articl.classification', 'classification')
-        .leftJoinAndSelect('tag', 'tag'),
+        .orderBy('articl.createdAt', 'DESC'),
       page,
       pageSize,
     });
@@ -63,34 +55,88 @@ export class ArticleService {
     file: GlobalType.UploadFile,
     { title, classificationId, tagId }: CreateArticleDTO,
   ) {
+    const [, count] = await this._articleRepository.findAndCount({
+      title,
+    });
+    if (count)
+      return this._responseService.error({
+        message: '标题重复！',
+      });
     const articleLink = await this._uploadMarkdown(file);
-    await this._articleRepository
-      .createQueryBuilder('article')
-      .insert()
-      .into(ArticleEntity)
-      .values({
-        title,
-        classificationId,
-        tagId: tagId.split(',').map((item) => parseInt(item)),
-        status: ArticleStatus.ENABLE,
-        likeCount: 0,
-        dislikeCount: 0,
-        articleLink,
-      })
-      .execute();
-
+    const tagIdArr = tagId.split(',').map((item) => parseInt(item));
+    await this._articleRepository.save({
+      title,
+      classificationId,
+      tagId: tagIdArr,
+      status: ArticleStatus.ENABLE,
+      likeCount: 0,
+      dislikeCount: 0,
+      articleLink,
+    });
     return this._responseService.success({
       message: '创建文章成功',
     });
   }
+
+  async info(id: string) {
+    const res = await this._articleRepository.findOne(id);
+    return this._responseService.success({
+      data: res,
+    });
+  }
+
+  async update(
+    file: GlobalType.UploadFile,
+    articleId: number,
+    { title, tagId, classificationId }: UpdateArticleDTO,
+  ) {
+    const findOne = await this._articleRepository.findOne(articleId);
+    if (!findOne)
+      return (
+        this,
+        this._responseService.error({
+          message: '不能更新不存在的文章',
+        })
+      );
+    const { articleLink: oldArticleLink } = findOne;
+    const newArticleLink = await this._uploadMarkdown(file);
+    const newArticle = {
+      articleId,
+      title,
+      classificationId: parseInt(classificationId),
+      tagId: JSON.parse(tagId),
+      status: ArticleStatus.ENABLE,
+      // likeCount: 0,
+      // dislikeCount: 0,
+      articleLink: newArticleLink,
+    };
+    await this._articleRepository
+      .createQueryBuilder()
+      .update(ArticleEntity)
+      .set(newArticle)
+      .where('articleId = :id', { id: articleId })
+      .execute();
+    const oldMdPath = oldArticleLink.match(/\/markdown\/[0-9]*/);
+    const defaultMdPath = this._envService.isDev
+      ? `/Users/kuubee/Desktop/self_porject/node/blog/static${oldMdPath}`
+      : `/home/assets${oldMdPath}`;
+    await fsP.rmdir(defaultMdPath, {
+      recursive: true,
+    });
+    return this._responseService.success({
+      message: '更新成功！',
+    });
+  }
+
   // 上传md文件
   private async _uploadMarkdown(file: GlobalType.UploadFile): Promise<string> {
+    const timestamp = new Date().getTime();
     const dirName = file.originalname.replace(/\.(zip)$/gi, '');
     let mdFileName: string;
     // 默认替换图片地址
     const imageReplaceUrl = this._envService.isDev
-      ? 'https://cc/bb/'
-      : `https://autocode.icu/assets/markdown/${dirName}/`;
+      ? `file:///Users/kuubee/Desktop/self_porject/node/blog/static/markdown/${timestamp}/`
+      : `https://autocode.icu/assets/markdown/${timestamp}/`;
     // 默认md根目录
     const mdPath = this._envService.isDev
       ? // 开发目录
@@ -98,12 +144,14 @@ export class ArticleService {
       : // 服务器目录
         '/home/assets/markdown';
     // 当前md的文件夹路径
-    const readMdPath = path.resolve(mdPath, `./${dirName}`);
+    const uncompressMdPath = path.resolve(mdPath, `./${dirName}`);
+    // 实际存的文件夹路径
+    const saveMdPath = path.resolve(mdPath, `./${timestamp}`);
     try {
-      await fsP.access(readMdPath, fs.constants.F_OK);
+      await fsP.access(uncompressMdPath, fs.constants.F_OK);
       this._responseService.error({
-        message: `目录存在重复请检查上传文件名称是否重复`,
-        data: readMdPath,
+        message: `解压目录存在重复请检查上传文件名称是否重复`,
+        data: uncompressMdPath,
       });
     } catch (error) {
       if (error instanceof HttpException) {
@@ -116,9 +164,9 @@ export class ArticleService {
       // 解压至目标路径
       await compressing.zip.uncompress(file.buffer, mdPath);
       // 检查文件夹是否存在
-      await fsP.access(readMdPath, fs.constants.F_OK);
+      await fsP.access(uncompressMdPath, fs.constants.F_OK);
       // 获取文件夹内容
-      const uncompressDir = await fsP.opendir(readMdPath);
+      const uncompressDir = await fsP.opendir(uncompressMdPath);
       for await (const dirent of uncompressDir) {
         const name = dirent.name;
         if (name.match(/\.md$/)) {
@@ -137,11 +185,11 @@ export class ArticleService {
       }
 
       // 带转换的md
-      const baseMdPath = path.join(readMdPath, `./${mdFileName}`);
+      const baseMdPath = path.join(uncompressMdPath, `./${mdFileName}`);
       // 创建 md 读取流
       const readable = fs.createReadStream(baseMdPath);
       // 转写的目标文件
-      const targetMdPath = path.join(readMdPath, `./index.md`);
+      const targetMdPath = path.join(uncompressMdPath, `./index.md`);
       // 创建 md 写入流
       const writeable = fs.createWriteStream(targetMdPath);
       // 创建 md 转换流
@@ -150,10 +198,11 @@ export class ArticleService {
       readable.pipe(imageUrlTransformPipe).pipe(writeable);
       // 删除基础md
       await fsP.unlink(baseMdPath);
+      execSync(`mv ${uncompressMdPath} ${saveMdPath}`);
       return path.join(imageReplaceUrl, `./index.md`);
     } catch (error) {
       console.log('外部错误', error);
-      await fsP.rmdir(readMdPath, {
+      await fsP.rmdir(uncompressMdPath, {
         recursive: true,
       });
       this._responseService.error();

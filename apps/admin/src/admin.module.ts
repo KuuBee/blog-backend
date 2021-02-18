@@ -23,8 +23,11 @@ import { SearchModule } from './search/search.module';
         port: parseInt(configService.get<string>('PORT')),
         username: configService.get<string>('NAME'),
         password: configService.get<string>('PASSWROD'),
-        database: configService.get<string>('DB_NAME'),
+        database: 'blog',
+        // configService.get<string>('DB_NAME')
         autoLoadEntities: true,
+        // synchronize: true,
+        // synchronize: configService.get<string>('ENVIRONMENT') === 'dev',
       }),
       inject: [ConfigService],
     }),

@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-01-15 16:12:57
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-01-15 16:23:14
+ * @LastEditTime: 2021-02-14 22:18:05
  */
 
 import {
@@ -40,6 +40,7 @@ export class ClassificationEntity {
 
   @Column({
     type: 'enum',
+    enumName: 'classification_status_test',
     enum: ClassificationStatus,
     default: () => ClassificationStatus.ENABLE,
   })
