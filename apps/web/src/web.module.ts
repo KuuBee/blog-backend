@@ -10,6 +10,10 @@ import { DecryptMiddleware } from '@app/lib/middleware/decrypt.middleware';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CryptInterceptor } from '@app/lib/interceptor/crypt.interceptor';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ArticleModule } from './article/article.module';
+import { SearchModule } from './search/search.module';
+import { TagModule } from './tag/tag.module';
+import { ClassificationModule } from './classification/classification.module';
 
 @Module({
   imports: [
@@ -29,6 +33,10 @@ import { FileInterceptor } from '@nestjs/platform-express';
       }),
       inject: [ConfigService],
     }),
+    ArticleModule,
+    SearchModule,
+    TagModule,
+    ClassificationModule,
   ],
   controllers: [WebController],
   providers: [

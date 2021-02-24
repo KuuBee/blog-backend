@@ -8,7 +8,7 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Get()
-  getHello(): string {
-    return this.adminService.getHello();
+  async getHello() {
+    return await this.adminService.getHello();
   }
 }

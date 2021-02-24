@@ -15,6 +15,7 @@ import { IndexArticleDTO } from '@app/lib/dto/article/index.dto';
 import { PaginationService } from '@app/lib/service/pagination/pagination.service';
 import { execSync } from 'child_process';
 import { UpdateArticleDTO } from '@app/lib/dto/article/update.dto';
+import { SelectParagraphPipe } from '@app/lib/pipe/select-paragraph.pipe';
 @Injectable()
 export class ArticleService {
   constructor(
@@ -62,7 +63,9 @@ export class ArticleService {
       return this._responseService.error({
         message: '标题重复！',
       });
-    const articleLink = await this._uploadMarkdown(file);
+    const { path: articleLink, firstParagraph } = await this._uploadMarkdown(
+      file,
+    );
     const tagIdArr = tagId.split(',').map((item) => parseInt(item));
     await this._articleRepository.save({
       title,
@@ -72,6 +75,7 @@ export class ArticleService {
       likeCount: 0,
       dislikeCount: 0,
       articleLink,
+      firstParagraph,
     });
     return this._responseService.success({
       message: '创建文章成功',
@@ -99,7 +103,9 @@ export class ArticleService {
         })
       );
     const { articleLink: oldArticleLink } = findOne;
-    const newArticleLink = await this._uploadMarkdown(file);
+    const { path: newArticleLink, firstParagraph } = await this._uploadMarkdown(
+      file,
+    );
     const newArticle = {
       articleId,
       title,
@@ -109,6 +115,7 @@ export class ArticleService {
       // likeCount: 0,
       // dislikeCount: 0,
       articleLink: newArticleLink,
+      firstParagraph,
     };
     await this._articleRepository
       .createQueryBuilder()
@@ -129,7 +136,9 @@ export class ArticleService {
   }
 
   // 上传md文件
-  private async _uploadMarkdown(file: GlobalType.UploadFile): Promise<string> {
+  private async _uploadMarkdown(
+    file: GlobalType.UploadFile,
+  ): Promise<{ path: string; firstParagraph: string }> {
     const timestamp = new Date().getTime();
     const dirName = file.originalname.replace(/\.(zip)$/gi, '');
     let mdFileName: string;
@@ -194,18 +203,37 @@ export class ArticleService {
       const writeable = fs.createWriteStream(targetMdPath);
       // 创建 md 转换流
       const imageUrlTransformPipe = new ImageUrlTransformPipe(imageReplaceUrl);
+      // 获取第一个段落
+      const selectParagraphPipe = new SelectParagraphPipe();
       // 写入成功 准备删除原md文件
-      readable.pipe(imageUrlTransformPipe).pipe(writeable);
+      readable
+        .pipe(imageUrlTransformPipe)
+        .pipe(selectParagraphPipe)
+        .pipe(writeable);
+      await new Promise((reslove, reject) => {
+        readable.on('close', () => {
+          reslove(null);
+        });
+        readable.on('error', (err) => {
+          reject(err);
+        });
+      });
       // 删除基础md
       await fsP.unlink(baseMdPath);
+      // 文件夹重命名
       execSync(`mv ${uncompressMdPath} ${saveMdPath}`);
-      return path.join(imageReplaceUrl, `./index.md`);
+      return {
+        path: path.join(imageReplaceUrl, `./index.md`),
+        firstParagraph: selectParagraphPipe.firstParagraph,
+      };
     } catch (error) {
       console.log('外部错误', error);
       await fsP.rmdir(uncompressMdPath, {
         recursive: true,
       });
-      this._responseService.error();
+      this._responseService.error({
+        data: error,
+      });
     }
   }
 }

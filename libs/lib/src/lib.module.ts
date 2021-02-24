@@ -11,6 +11,8 @@ import { CryptoService } from './service/crypto/crypto.service';
 import { CryptInterceptor } from './interceptor/crypt.interceptor';
 import { PaginationService } from './service/pagination/pagination.service';
 import { EnvService } from './service/env/env.service';
+import { SearchService } from './service/search/search.service';
+import { ALL_ENTITY } from './utils/entity';
 
 // TODO jwt密钥需要隐藏
 const secret = 'secretKey';
@@ -36,9 +38,10 @@ const SERVICE = [
   CryptInterceptor,
   PaginationService,
   EnvService,
+  SearchService,
 ];
 @Module({
-  imports: [...MODULE],
+  imports: [...MODULE, ...ALL_ENTITY],
   providers: [...SERVICE],
   exports: [...SERVICE, ...MODULE],
 })

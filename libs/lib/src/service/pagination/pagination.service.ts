@@ -12,6 +12,7 @@ export interface Pagination {
   perPage: number;
   total: number;
   totalPages: number;
+  isLast: boolean;
 }
 
 @Injectable()
@@ -42,6 +43,7 @@ export class PaginationService {
         perPage: pageSize,
         total,
         totalPages,
+        isLast: totalPages - 1 <= page,
       },
     };
   }

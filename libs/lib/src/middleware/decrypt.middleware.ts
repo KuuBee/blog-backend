@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-01-25 11:06:12
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-01-28 15:52:20
+ * @LastEditTime: 2021-02-20 11:46:21
  */
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
@@ -17,8 +17,6 @@ import {
 export class DecryptMiddleware implements NestMiddleware {
   constructor(private _cryptoService: CryptoService) {}
   use(req: Request, res: Response, next: () => void) {
-    console.log('aaaa', req.body);
-
     // 不考虑 params 穿参
 
     // console.log('中间件----------------解密开始');

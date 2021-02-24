@@ -16,6 +16,7 @@ import { GlobalType } from '../interface';
 import FormData from 'form-data';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ResponseService } from '../service/response.service';
+import { EnvService } from '../service/env/env.service';
 
 // FileInterceptor('file').
 
@@ -24,10 +25,18 @@ export class CryptInterceptor implements NestInterceptor {
   constructor(
     private _cryptoService: CryptoService,
     private _responseService: ResponseService,
+    private _envService: EnvService,
   ) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const req = context.switchToHttp().getRequest<Request>();
-
+    // 开发模式取消加密
+    if (this._envService.isDev) return next.handle();
+    // 缺少 secret-key 时报错
+    const secretKey = req.headers['secret-key'];
+    if (!secretKey)
+      throw this._responseService.error({
+        message: 'FUCK YOU HACKER',
+      });
     const { key, iv } = JSON.parse(
       this._cryptoService.rsaDecrypto(req.headers['secret-key'] as string),
     ) as CryptoServiceType.SecretKey;

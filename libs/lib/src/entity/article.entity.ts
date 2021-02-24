@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-01-13 09:55:21
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-02-18 14:16:38
+ * @LastEditTime: 2021-02-19 14:21:54
  */
 import {
   Entity,
@@ -63,6 +63,12 @@ export class ArticleEntity {
   })
   tagId: number[];
 
+  @Column({
+    name: 'first_paragraph',
+    type: 'varchar',
+    length: 1000,
+  })
+  firstParagraph: string;
   @Column({
     type: 'enum',
     enum: ArticleStatus,
