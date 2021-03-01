@@ -12,7 +12,7 @@ export class TagService {
     private _tagRepository: Repository<TagEntity>,
   ) {}
   async index() {
-    const res = await this._tagRepository.find({
+    const data = await this._tagRepository.find({
       select: ['tagId', 'count', 'content'],
       where: [
         {
@@ -24,7 +24,16 @@ export class TagService {
       },
     });
     return this._response.success({
-      data: res,
+      data,
+    });
+  }
+
+  async info(id: string) {
+    const data = await this._tagRepository.findOne(id, {
+      select: ['tagId', 'content', 'createdAt'],
+    });
+    return this._response.success({
+      data,
     });
   }
 }

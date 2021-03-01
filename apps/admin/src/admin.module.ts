@@ -11,6 +11,7 @@ import { TagModule } from './tag/tag.module';
 import { ClassificationModule } from './classification/classification.module';
 import { ArticleModule } from './article/article.module';
 import { SearchModule } from './search/search.module';
+import { FriendLinkModule } from './friend-link/friend-link.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { SearchModule } from './search/search.module';
     ClassificationModule,
     ArticleModule,
     SearchModule,
+    FriendLinkModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],

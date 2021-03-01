@@ -14,6 +14,7 @@ import { ArticleModule } from './article/article.module';
 import { SearchModule } from './search/search.module';
 import { TagModule } from './tag/tag.module';
 import { ClassificationModule } from './classification/classification.module';
+import { FriendLinkModule } from './friend-link/friend-link.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { ClassificationModule } from './classification/classification.module';
     SearchModule,
     TagModule,
     ClassificationModule,
+    FriendLinkModule,
   ],
   controllers: [WebController],
   providers: [

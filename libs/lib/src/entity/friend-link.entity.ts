@@ -48,7 +48,13 @@ export class FriendLinkEntity {
   subtitle: string;
 
   @Column()
+  // 博客地址链接
   link: string;
+
+  @Column({
+    name: 'image_link',
+  })
+  imageLink: string;
 
   @Column({
     type: 'enum',

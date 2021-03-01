@@ -5,7 +5,7 @@ import {
 import { ResponseService } from '@app/lib/service/response.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class ClassificationService {
@@ -15,17 +15,34 @@ export class ClassificationService {
     private _repository: Repository<ClassificationEntity>,
   ) {}
 
+  private _findClassAdditionalInfo: Pick<
+    FindOneOptions<ClassificationEntity>,
+    'where' | 'order'
+  > = {
+    where: [
+      {
+        status: ClassificationStatus.ENABLE,
+      },
+    ],
+    order: {
+      createdAt: 'DESC',
+    },
+  };
+
   async index() {
     const data = await this._repository.find({
       select: ['classificationId', 'content', 'count'],
-      where: [
-        {
-          status: ClassificationStatus.ENABLE,
-        },
-      ],
-      order: {
-        createdAt: 'DESC',
-      },
+      ...this._findClassAdditionalInfo,
+    });
+    return this._response.success({
+      data,
+    });
+  }
+
+  async info(id: string) {
+    const data = await this._repository.findOne(id, {
+      select: ['classificationId', 'content', 'createdAt'],
+      ...this._findClassAdditionalInfo,
     });
     return this._response.success({
       data,
