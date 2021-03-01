@@ -5,6 +5,11 @@ import { UserEntity } from '../entity/user.entity';
 import { ResponseService } from './response.service';
 import { JwtService } from '@nestjs/jwt';
 
+export interface JwtValidateInfo {
+  userId: number;
+  username: string;
+}
+
 @Injectable()
 export class LibJwtService extends PassportStrategy(Strategy) {
   constructor(
@@ -24,7 +29,7 @@ export class LibJwtService extends PassportStrategy(Strategy) {
    * @param {any} payload
    * @return {boolean}
    */
-  async validate(payload: any) {
+  async validate(payload: any): Promise<JwtValidateInfo> {
     // TODO 增加token缓存
     // 为了实现登陆更新token的问题
     // 如果token解码成功就会走到这里

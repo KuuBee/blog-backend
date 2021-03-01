@@ -16,8 +16,11 @@ import {
 import { DateService } from '@app/lib/service/date.service';
 
 export enum FriendLinkStatus {
+  // 启用
   ENABLE = 'enable',
+  // 禁用
   DISABLE = 'disable',
+  // 审核中
   UNDER_ERVIEW = 'under_review',
 }
 @Entity({
@@ -52,9 +55,9 @@ export class FriendLinkEntity {
   link: string;
 
   @Column({
-    name: 'image_link',
+    name: 'avatar_link',
   })
-  imageLink: string;
+  avatarLink: string;
 
   @Column({
     type: 'enum',
@@ -67,6 +70,7 @@ export class FriendLinkEntity {
     length: 20,
     nullable: true,
   })
+  // 备用字段
   color: string;
 
   @CreateDateColumn({
