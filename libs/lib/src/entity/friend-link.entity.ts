@@ -62,7 +62,7 @@ export class FriendLinkEntity {
   @Column({
     type: 'enum',
     enum: FriendLinkStatus,
-    default: () => FriendLinkStatus.ENABLE,
+    default: FriendLinkStatus.ENABLE,
   })
   status: FriendLinkStatus;
 
@@ -87,11 +87,4 @@ export class FriendLinkEntity {
     transformer: DateService.transformer(),
   })
   updatedAt: string;
-
-  @Column({
-    name: 'delete_at',
-    type: 'timestamptz',
-    nullable: true,
-  })
-  deleteAt: string;
 }

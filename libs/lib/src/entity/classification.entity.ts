@@ -34,7 +34,7 @@ export class ClassificationEntity {
 
   @Column({
     type: 'int4',
-    default: () => 0,
+    default: '0',
   })
   count: number;
 
@@ -42,7 +42,7 @@ export class ClassificationEntity {
     type: 'enum',
     enumName: 'classification_status_test',
     enum: ClassificationStatus,
-    default: () => ClassificationStatus.ENABLE,
+    default: ClassificationStatus.ENABLE,
   })
   status: ClassificationStatus;
 
@@ -60,11 +60,4 @@ export class ClassificationEntity {
     transformer: DateService.transformer(),
   })
   updatedAt: string;
-
-  @Column({
-    name: 'delete_at',
-    type: 'timestamptz',
-    nullable: true,
-  })
-  deleteAt: string;
 }

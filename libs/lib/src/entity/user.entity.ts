@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-01-13 09:55:21
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-01-22 17:16:26
+ * @LastEditTime: 2021-03-02 15:10:36
  */
 import {
   Entity,
@@ -31,9 +31,7 @@ export class UserEntity {
   @Column()
   name: string;
 
-  @Column({
-    nullable: true,
-  })
+  @Column()
   avatar: string;
 
   @Column()
@@ -43,14 +41,14 @@ export class UserEntity {
   email: string;
 
   @Column({
-    default: () => 10,
+    default: '10',
   })
   level: number;
 
   @Column({
     type: 'enum',
     enum: UserStatus,
-    default: () => UserStatus.ENABLE,
+    default: UserStatus.ENABLE,
   })
   status: UserStatus;
 
@@ -75,11 +73,4 @@ export class UserEntity {
     transformer: DateService.transformer(),
   })
   updatedAt: Date;
-
-  @Column({
-    name: 'delete_at',
-    type: 'timestamptz',
-    nullable: true,
-  })
-  deleteAt: Date;
 }

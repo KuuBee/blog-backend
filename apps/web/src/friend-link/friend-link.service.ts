@@ -35,4 +35,18 @@ export class FriendLinkService {
       message: '申请已经提交啦，通过会有邮件提醒哦',
     });
   }
+  async index() {
+    const data = await this._repository.find({
+      select: ['avatarLink', 'title', 'subtitle', 'link'],
+      where: {
+        status: FriendLinkStatus.ENABLE,
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    return this._response.success({
+      data,
+    });
+  }
 }

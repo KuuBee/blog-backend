@@ -1,5 +1,12 @@
 import { CreateFriendLinkDTO } from '@app/lib/dto/friend-link/create.dto';
-import { Body, Controller, Post, UseGuards, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UseGuards,
+  Request,
+  Get,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FriendLinkService } from './friend-link.service';
 
@@ -11,5 +18,10 @@ export class FriendLinkController {
   @UseGuards(AuthGuard('jwt'))
   create(@Body() body: CreateFriendLinkDTO, @Request() { user }) {
     return this._friendLink.create(body, user);
+  }
+
+  @Get()
+  index() {
+    return this._friendLink.index();
   }
 }

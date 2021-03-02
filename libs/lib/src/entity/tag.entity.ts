@@ -39,12 +39,13 @@ export class TagEntity {
   @Column({
     type: 'enum',
     enum: TagStatus,
-    default: () => TagStatus.ENABLE,
+    default: TagStatus.ENABLE,
   })
   status: TagStatus;
 
   @Column({
     type: 'int4',
+    default: '0',
   })
   count: number;
 
@@ -62,11 +63,4 @@ export class TagEntity {
     transformer: DateService.transformer(),
   })
   updatedAt: string;
-
-  @Column({
-    name: 'delete_at',
-    type: 'timestamptz',
-    nullable: true,
-  })
-  deleteAt: string;
 }

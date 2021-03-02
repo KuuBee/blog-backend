@@ -31,6 +31,8 @@ import { FriendLinkModule } from './friend-link/friend-link.module';
         password: configService.get<string>('PASSWROD'),
         database: configService.get<string>('DB_NAME'),
         autoLoadEntities: true,
+        // synchronize: true,
+        // dropSchema: true,
       }),
       inject: [ConfigService],
     }),

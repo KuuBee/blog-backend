@@ -74,11 +74,4 @@ export class ArticleLike {
     },
   })
   updatedAt: string;
-
-  @Column({
-    name: 'delete_at',
-    type: 'timestamptz',
-    nullable: true,
-  })
-  deleteAt: string;
 }

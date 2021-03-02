@@ -1,9 +1,9 @@
 /*
- * @Descripttion: comment 实体
+ * @Descripttion: 评论实体
  * @Author: KuuBee
  * @Date: 2021-01-15 16:12:57
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-01-15 16:12:57
+ * @LastEditTime: 2021-03-02 14:59:03
  */
 
 import {
@@ -43,57 +43,29 @@ export class CommentEntity {
   articleId: number;
 
   @Column({
-    name: 'parent_comment_id',
-    type: 'int',
-    nullable: true,
+    length: 3000,
+    type: 'varchar',
   })
-  parentCommentId: number;
-
-  @Column({
-    name: 'parent_comment_user_id',
-    type: 'int',
-    nullable: true,
-  })
-  parentCommentUserId: number;
-
-  @Column({
-    name: 'reply_comment_id',
-    type: 'int',
-    nullable: true,
-  })
-  replyCommentId: number;
-
-  @Column({
-    name: 'reply_comment_user_id',
-    type: 'int',
-    nullable: true,
-  })
-  replyCommentUserId: number;
-
+  // 最多3k字节
+  content: string;
   @Column({
     name: 'comment_os',
     length: 30,
     nullable: true,
   })
-  commentOs: string;
+  os: string;
 
   @Column({
     name: 'comment_browser',
     length: 30,
     nullable: true,
   })
-  commentBrowser: string;
-
-  @Column({
-    name: 'comment_browser',
-    length: 2000,
-  })
-  content: string;
+  browser: string;
 
   @Column({
     type: 'enum',
     enum: CommentStatus,
-    default: () => CommentStatus.ENABLE,
+    default: CommentStatus.ENABLE,
   })
   status: CommentStatus;
 
@@ -111,11 +83,4 @@ export class CommentEntity {
     transformer: DateService.transformer(),
   })
   updatedAt: string;
-
-  @Column({
-    name: 'delete_at',
-    type: 'timestamptz',
-    nullable: true,
-  })
-  deleteAt: string;
 }

@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-01-13 09:55:21
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-02-19 14:21:54
+ * @LastEditTime: 2021-03-02 14:58:08
  */
 import {
   Entity,
@@ -72,21 +72,21 @@ export class ArticleEntity {
   @Column({
     type: 'enum',
     enum: ArticleStatus,
-    default: () => ArticleStatus.ENABLE,
+    default: ArticleStatus.ENABLE,
   })
   status: ArticleStatus;
 
   @Column({
     name: 'like_count',
     type: 'int',
-    default: 0,
+    default: '0',
   })
   likeCount: number;
 
   @Column({
     name: 'dislike_count',
     type: 'int',
-    default: 0,
+    default: '0',
   })
   dislikeCount: number;
 
@@ -104,11 +104,4 @@ export class ArticleEntity {
     transformer: DateService.transformer(),
   })
   updatedAt: string;
-
-  @Column({
-    name: 'delete_at',
-    type: 'timestamptz',
-    nullable: true,
-  })
-  deleteAt: string;
 }
