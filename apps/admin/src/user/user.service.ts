@@ -8,6 +8,8 @@ import { IndexUserDTO } from '@app/lib/dto/user/index.dto';
 import { CreateAdminUserDTO } from '@app/lib/dto/user/cteate.dto';
 import bcrypt from 'bcrypt';
 import { LibJwtService } from '@app/lib/service/jwt.service';
+import { ConfigService } from '@nestjs/config';
+import { UtilsService } from '@app/lib/service/utils.service';
 
 @Injectable()
 export class UserService {
@@ -17,6 +19,8 @@ export class UserService {
     private _responseService: ResponseService,
     private _pagination: PaginationService,
     private _libJwtService: LibJwtService,
+    private _config: ConfigService,
+    private _utils: UtilsService,
   ) {}
   async index(query: IndexUserDTO) {
     const data = await this._pagination.pagination({
@@ -41,7 +45,7 @@ export class UserService {
   }
   async create(body: CreateAdminUserDTO) {
     const { name, email, password, vipCode } = body;
-    if (vipCode !== '(U*CY*(ASYHD(AIOSDA)(_DIA_OJDPA)))') return;
+    if (vipCode !== this._config.get<string>('VIP_CODE')) return;
     const findOne = await this._userRepository.findOne({
       name,
       email,
@@ -52,9 +56,9 @@ export class UserService {
       });
     const encryptPassword = await bcrypt.hash(password, 10);
     const insertOne = await this._userRepository.insert({
-      name,
+      ...this._utils.omit(body, 'vipCode'),
+      avatar: 'https://autocode.icu/assets/images/blog-avatar/root.webp',
       password: encryptPassword,
-      email,
       level: 200,
     });
     return this._responseService.success({

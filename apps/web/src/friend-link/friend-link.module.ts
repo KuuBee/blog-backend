@@ -6,6 +6,6 @@ import { FriendLinkService } from './friend-link.service';
 @Module({
   controllers: [FriendLinkController],
   providers: [FriendLinkService],
-  imports: [LibModule, ...ALL_ENTITY],
+  imports: [LibModule],
 })
 export class FriendLinkModule {}

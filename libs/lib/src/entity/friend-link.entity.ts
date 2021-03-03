@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-01-15 16:12:57
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-01-15 16:47:44
+ * @LastEditTime: 2021-03-03 09:46:39
  */
 
 import {
@@ -12,8 +12,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { DateService } from '@app/lib/service/date.service';
+import { UserEntity } from './user.entity';
 
 export enum FriendLinkStatus {
   // 启用
@@ -87,4 +90,12 @@ export class FriendLinkEntity {
     transformer: DateService.transformer(),
   })
   updatedAt: string;
+
+  // 关系
+
+  @OneToOne(() => UserEntity)
+  @JoinColumn({
+    name: 'user_id',
+  })
+  user: UserEntity;
 }

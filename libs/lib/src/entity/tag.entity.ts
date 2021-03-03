@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-01-15 16:12:57
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-02-14 16:56:33
+ * @LastEditTime: 2021-03-03 09:48:46
  */
 
 import {
@@ -15,9 +15,11 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  JoinColumn,
 } from 'typeorm';
 import { DateService } from '@app/lib/service/date.service';
 import { ArticleEntity } from './article.entity';
+import { UserEntity } from './user.entity';
 
 export enum TagStatus {
   ENABLE = 'enable',
@@ -63,4 +65,8 @@ export class TagEntity {
     transformer: DateService.transformer(),
   })
   updatedAt: string;
+
+  // 关系
+  @ManyToMany(() => ArticleEntity, (article) => article.tag)
+  article: ArticleEntity;
 }

@@ -16,11 +16,14 @@ import { PaginationService } from '@app/lib/service/pagination/pagination.servic
 import { execSync } from 'child_process';
 import { UpdateArticleDTO } from '@app/lib/dto/article/update.dto';
 import { SelectParagraphPipe } from '@app/lib/pipe/select-paragraph.pipe';
+import { TagEntity } from '@app/lib/entity/tag.entity';
 @Injectable()
 export class ArticleService {
   constructor(
     @InjectRepository(ArticleEntity)
     private _articleRepository: Repository<ArticleEntity>,
+    @InjectRepository(TagEntity)
+    private _tagRepository: Repository<TagEntity>,
     private _responseService: ResponseService,
     private _envService: EnvService,
     private _paginationService: PaginationService,
@@ -41,8 +44,11 @@ export class ArticleService {
           'articl.likeCount',
           'articl.createdAt',
           'articl.updatedAt',
+          'tags',
         ])
         .innerJoin('articl.classification', 'classification')
+        // 这个是后来才加的功能。。。
+        .leftJoinAndSelect('articl.tag', 'tags')
         .orderBy('articl.createdAt', 'DESC'),
       page,
       pageSize,
@@ -67,6 +73,13 @@ export class ArticleService {
       file,
     );
     const tagIdArr = tagId.split(',').map((item) => parseInt(item));
+    const tagEntityList = await this._tagRepository
+      .createQueryBuilder('tag')
+      .select()
+      .where('tag.tagId = ANY(:tag)', {
+        tag: tagIdArr,
+      })
+      .getMany();
     await this._articleRepository.save({
       title,
       classificationId,
@@ -76,6 +89,7 @@ export class ArticleService {
       dislikeCount: 0,
       articleLink,
       firstParagraph,
+      tag: tagEntityList,
     });
     return this._responseService.success({
       message: '创建文章成功',

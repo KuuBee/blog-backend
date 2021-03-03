@@ -20,6 +20,7 @@ import {
 import { DateService } from '@app/lib/service/date.service';
 import { ClassificationEntity } from './classification.entity';
 import { TagEntity } from './tag.entity';
+import { CommentEntity } from './comment.entity';
 
 export enum ArticleStatus {
   ENABLE = 'enable',
@@ -50,11 +51,6 @@ export class ArticleEntity {
   })
   classificationId: number;
 
-  // 映射关系
-  @OneToOne(() => ClassificationEntity)
-  @JoinColumn({ name: 'classification_id' })
-  classification?: ClassificationEntity;
-
   @Column({
     name: 'tag_id',
     type: 'int',
@@ -66,7 +62,7 @@ export class ArticleEntity {
   @Column({
     name: 'first_paragraph',
     type: 'varchar',
-    length: 1000,
+    length: 3000,
   })
   firstParagraph: string;
   @Column({
@@ -104,4 +100,15 @@ export class ArticleEntity {
     transformer: DateService.transformer(),
   })
   updatedAt: string;
+
+  // 关系
+  // 映射关系
+  @OneToOne(() => ClassificationEntity)
+  @JoinColumn({ name: 'classification_id' })
+  classification?: ClassificationEntity;
+  @OneToMany(() => CommentEntity, (comment) => comment.article)
+  comment: CommentEntity[];
+  @ManyToMany(() => TagEntity, (tag) => tag.article)
+  @JoinTable()
+  tag: TagEntity[];
 }

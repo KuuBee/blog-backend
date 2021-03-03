@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-01-13 09:55:21
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-03-02 15:10:36
+ * @LastEditTime: 2021-03-02 17:22:44
  */
 import {
   Entity,
@@ -11,8 +11,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { DateService } from '@app/lib/service/date.service';
+import { ReplyEntity } from './reply.entity';
+import { CommentEntity } from './comment.entity';
 
 export enum UserStatus {
   ENABLE = 'enable',
@@ -35,6 +38,8 @@ export class UserEntity {
   avatar: string;
 
   @Column()
+  // TODO
+  // 禁止select
   password: string;
 
   @Column()
@@ -73,4 +78,10 @@ export class UserEntity {
     transformer: DateService.transformer(),
   })
   updatedAt: Date;
+
+  // 关系部分
+  @OneToMany(() => ReplyEntity, (reply) => reply.user)
+  reply: ReplyEntity[];
+  @OneToMany(() => CommentEntity, (comment) => comment.user)
+  comment: CommentEntity[];
 }

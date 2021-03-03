@@ -4,7 +4,6 @@ import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
-import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { AssetsModule } from './assets/assets.module';
 import { TagModule } from './tag/tag.module';
@@ -12,6 +11,7 @@ import { ClassificationModule } from './classification/classification.module';
 import { ArticleModule } from './article/article.module';
 import { SearchModule } from './search/search.module';
 import { FriendLinkModule } from './friend-link/friend-link.module';
+import { TokenModule } from './token/token.module';
 
 @Module({
   imports: [
@@ -27,10 +27,10 @@ import { FriendLinkModule } from './friend-link/friend-link.module';
         database: configService.get<string>('DB_NAME'),
         autoLoadEntities: true,
         // synchronize: true,
+        // dropSchema: true,
       }),
       inject: [ConfigService],
     }),
-    AuthModule,
     UserModule,
     AssetsModule,
     TagModule,
@@ -38,6 +38,7 @@ import { FriendLinkModule } from './friend-link/friend-link.module';
     ArticleModule,
     SearchModule,
     FriendLinkModule,
+    TokenModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],

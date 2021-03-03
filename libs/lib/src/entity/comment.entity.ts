@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-01-15 16:12:57
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-03-02 14:59:03
+ * @LastEditTime: 2021-03-02 17:03:30
  */
 
 import {
@@ -12,14 +12,25 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { DateService } from '@app/lib/service/date.service';
+import { type } from 'os';
+import { ReplyEntity } from './reply.entity';
+import { UserEntity } from './user.entity';
+import { ArticleEntity } from './article.entity';
 
 export enum CommentStatus {
   ENABLE = 'enable',
   DISABLE = 'disable',
   UNDER_ERVIEW = 'under_review',
 }
+
+/* 
+comment表 只负责管理回复文章的评论
+*/
 @Entity({
   name: 'comment',
 })
@@ -49,15 +60,15 @@ export class CommentEntity {
   // 最多3k字节
   content: string;
   @Column({
-    name: 'comment_os',
-    length: 30,
+    name: 'os',
+    length: 100,
     nullable: true,
   })
   os: string;
 
   @Column({
-    name: 'comment_browser',
-    length: 30,
+    name: 'browser',
+    length: 100,
     nullable: true,
   })
   browser: string;
@@ -83,4 +94,18 @@ export class CommentEntity {
     transformer: DateService.transformer(),
   })
   updatedAt: string;
+
+  // 关系
+  @OneToMany(() => ReplyEntity, (reply) => reply.comment, { cascade: true })
+  reply: ReplyEntity[];
+  @ManyToOne(() => UserEntity, (user) => user.comment)
+  @JoinColumn({
+    name: 'user_id',
+  })
+  user: UserEntity;
+  @ManyToOne(() => ArticleEntity, (article) => article.comment)
+  @JoinColumn({
+    name: 'article_id',
+  })
+  article: ArticleEntity;
 }

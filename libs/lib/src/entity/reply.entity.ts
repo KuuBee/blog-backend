@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-03-02 15:31:00
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-03-02 15:36:24
+ * @LastEditTime: 2021-03-02 17:01:14
  */
 
 import {
@@ -12,12 +12,20 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { DateService } from '../service/date.service';
+import { CommentEntity } from './comment.entity';
+import { UserEntity } from './user.entity';
 
 /* 
-其实这是一个残废的回复表
+reply表只管理回复评论的评论和
 */
+export enum ReplyType {
+  REPLY = 'reply',
+  COMMENT = 'comment',
+}
 
 @Entity({
   name: 'reply',
@@ -34,31 +42,32 @@ export class ReplyEntity {
 
   @Column({
     type: 'int',
-    nullable: true,
     comment: '当回复评论时 存这个',
+    name: 'comment_id',
   })
-  // TODO
-  // 便于文章评论检索
   commentId: number;
 
   @Column({
     type: 'int',
     name: 'reply_id',
     nullable: true,
-    comment: '当回复回复时 存这个',
+    comment: '当回复回复时此值为回复的回复id，当回复评论时此值为null',
   })
-  // TODO
-  // 需要一对多
-  // 当回复回复时 存这个
   replyId: number;
+
+  @Column({
+    type: 'enum',
+    enum: ReplyType,
+    enumName: 'reply_type',
+    comment: '回复类型，可能为评论回复和回复回复',
+  })
+  replyType: ReplyType;
 
   @Column({
     type: 'int',
     name: 'user_id',
     comment: '回复的用户id',
   })
-  // TODO
-  // 一对一
   userId: number;
 
   @Column({
@@ -68,6 +77,20 @@ export class ReplyEntity {
   })
   // 最多3k字节
   content: string;
+
+  @Column({
+    name: 'os',
+    length: 100,
+    nullable: true,
+  })
+  os: string;
+
+  @Column({
+    name: 'browser',
+    length: 100,
+    nullable: true,
+  })
+  browser: string;
 
   @CreateDateColumn({
     name: 'created_at',
@@ -83,4 +106,17 @@ export class ReplyEntity {
     transformer: DateService.transformer(),
   })
   updatedAt: string;
+
+  // 关系
+
+  @ManyToOne(() => CommentEntity, (comment) => comment.reply)
+  @JoinColumn({
+    name: 'comment_id',
+  })
+  comment: CommentEntity;
+  @ManyToOne(() => UserEntity, (user) => user.reply)
+  @JoinColumn({
+    name: 'user_id',
+  })
+  user: UserEntity;
 }

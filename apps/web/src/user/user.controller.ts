@@ -6,24 +6,16 @@ import {
   Put,
   UploadedFile,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiOperation } from '@nestjs/swagger';
 import { CreateUserDTO } from '@app/lib/dto/user/cteate.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { GlobalType } from '@app/lib/interface';
-import { LibService } from '@app/lib';
-import { ConfigService } from '@nestjs/config';
 
 @Controller('user')
 export class UserController {
-  constructor(
-    private _userService: UserService,
-    private _libService: LibService,
-    private _configService: ConfigService,
-  ) {}
+  constructor(private _userService: UserService) {}
 
   @UseGuards(AuthGuard('jwt'))
   @Get()

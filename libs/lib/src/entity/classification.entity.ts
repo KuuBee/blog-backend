@@ -40,7 +40,7 @@ export class ClassificationEntity {
 
   @Column({
     type: 'enum',
-    enumName: 'classification_status_test',
+    enumName: 'classification_status',
     enum: ClassificationStatus,
     default: ClassificationStatus.ENABLE,
   })

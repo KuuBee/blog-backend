@@ -1,7 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { WebController } from './web.controller';
 import { WebService } from './web.service';
-import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { LibModule } from '@app/lib';
@@ -15,11 +14,11 @@ import { SearchModule } from './search/search.module';
 import { TagModule } from './tag/tag.module';
 import { ClassificationModule } from './classification/classification.module';
 import { FriendLinkModule } from './friend-link/friend-link.module';
+import { TokenModule } from './token/token.module';
 
 @Module({
   imports: [
     LibModule,
-    AuthModule,
     UserModule,
     TypeOrmModule.forRootAsync({
       imports: [LibModule],
@@ -41,6 +40,7 @@ import { FriendLinkModule } from './friend-link/friend-link.module';
     TagModule,
     ClassificationModule,
     FriendLinkModule,
+    TokenModule,
   ],
   controllers: [WebController],
   providers: [

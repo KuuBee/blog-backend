@@ -15,18 +15,19 @@ import { SearchService } from './service/search/search.service';
 import { ALL_ENTITY } from './utils/entity';
 
 // TODO jwt密钥需要隐藏
-const secret = 'secretKey';
+export const jwtSecretKey = 'secretKey2';
 
 const MODULE = [
   ConfigModule.forRoot({
     envFilePath: path.normalize(__dirname + '../../../../.env'),
   }),
   JwtModule.register({
-    secret,
+    secret: jwtSecretKey,
     signOptions: {
       expiresIn: '60 days',
     },
   }),
+  ...ALL_ENTITY,
 ];
 const SERVICE = [
   LibService,
@@ -41,7 +42,7 @@ const SERVICE = [
   SearchService,
 ];
 @Module({
-  imports: [...MODULE, ...ALL_ENTITY],
+  imports: [...MODULE],
   providers: [...SERVICE],
   exports: [...SERVICE, ...MODULE],
 })

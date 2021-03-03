@@ -1,9 +1,9 @@
 /*
- * @Descripttion: articleLike 实体
+ * @Descripttion: articleLike 实体 备用表
  * @Author: KuuBee
  * @Date: 2021-01-15 16:12:57
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-01-15 16:23:14
+ * @LastEditTime: 2021-03-02 17:23:43
  */
 
 import {

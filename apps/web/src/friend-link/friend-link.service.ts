@@ -3,7 +3,6 @@ import {
   FriendLinkEntity,
   FriendLinkStatus,
 } from '@app/lib/entity/friend-link.entity';
-import { EnvService } from '@app/lib/service/env/env.service';
 import { JwtValidateInfo } from '@app/lib/service/jwt.service';
 import { ResponseService } from '@app/lib/service/response.service';
 import { Injectable } from '@nestjs/common';
@@ -16,13 +15,12 @@ export class FriendLinkService {
     private _response: ResponseService,
     @InjectRepository(FriendLinkEntity)
     private _repository: Repository<FriendLinkEntity>,
-    private _env: EnvService,
   ) {}
   async create(body: CreateFriendLinkDTO, { userId }: JwtValidateInfo) {
     const [, count] = await this._repository.findAndCount({
       userId,
     });
-    if (count && this._env.isPron)
+    if (count)
       return this._response.error({
         message: '每个人只能提交一次申请 :P',
       });

@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { UserEntity } from '../entity/user.entity';
-import { ResponseService } from './response.service';
 import { JwtService } from '@nestjs/jwt';
+import { jwtSecretKey } from '..';
 
 export interface JwtValidateInfo {
   userId: number;
@@ -12,15 +12,12 @@ export interface JwtValidateInfo {
 
 @Injectable()
 export class LibJwtService extends PassportStrategy(Strategy) {
-  constructor(
-    private _responseService: ResponseService,
-    private _jwtService: JwtService,
-  ) {
+  constructor(private _jwtService: JwtService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       // TODO 修改密钥值环境变量
-      secretOrKey: 'secretKey',
+      secretOrKey: jwtSecretKey,
     });
   }
 
