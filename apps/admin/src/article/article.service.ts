@@ -9,7 +9,7 @@ import { ImageUrlTransformPipe } from '@app/lib/pipe/fs-markdown.pipe';
 import { EnvService } from '@app/lib/service/env/env.service';
 import { CreateArticleDTO } from '@app/lib/dto/article/create.dto';
 import { ArticleEntity, ArticleStatus } from '@app/lib/entity/article.entity';
-import { Repository } from 'typeorm';
+import { getConnection, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IndexArticleDTO } from '@app/lib/dto/article/index.dto';
 import { PaginationService } from '@app/lib/service/pagination/pagination.service';
@@ -17,6 +17,7 @@ import { execSync } from 'child_process';
 import { UpdateArticleDTO } from '@app/lib/dto/article/update.dto';
 import { SelectParagraphPipe } from '@app/lib/pipe/select-paragraph.pipe';
 import { TagEntity } from '@app/lib/entity/tag.entity';
+import { ClassificationEntity } from '@app/lib/entity/classification.entity';
 @Injectable()
 export class ArticleService {
   constructor(
@@ -24,6 +25,8 @@ export class ArticleService {
     private _articleRepository: Repository<ArticleEntity>,
     @InjectRepository(TagEntity)
     private _tagRepository: Repository<TagEntity>,
+    @InjectRepository(ClassificationEntity)
+    private _classRepository: Repository<ClassificationEntity>,
     private _responseService: ResponseService,
     private _envService: EnvService,
     private _paginationService: PaginationService,
@@ -80,19 +83,75 @@ export class ArticleService {
         tag: tagIdArr,
       })
       .getMany();
-    await this._articleRepository.save({
-      title,
-      classificationId,
-      tagId: tagIdArr,
-      status: ArticleStatus.ENABLE,
-      likeCount: 0,
-      dislikeCount: 0,
-      articleLink,
-      firstParagraph,
-      tag: tagEntityList,
-    });
+    const classEntity = await this._classRepository.findOne(classificationId);
+
+    const res = await getConnection().transaction(
+      async (transactionalEntityManager) => {
+        await transactionalEntityManager.save(ArticleEntity, {
+          title,
+          classificationId,
+          tagId: tagIdArr,
+          status: ArticleStatus.ENABLE,
+          likeCount: 0,
+          dislikeCount: 0,
+          articleLink,
+          firstParagraph,
+          tag: tagEntityList,
+          classification: classEntity,
+        });
+        // await transactionalEntityManager
+        //   .createQueryBuilder()
+        //   .insert()
+        //   .into(ArticleEntity)
+        //   .values({
+        //     title,
+        //     classificationId,
+        //     tagId: tagIdArr,
+        //     status: ArticleStatus.ENABLE,
+        //     likeCount: 0,
+        //     dislikeCount: 0,
+        //     articleLink,
+        //     firstParagraph,
+        //     tag: tagEntityList,
+        //     classification: classEntity,
+        //   })
+        //   .execute();
+        await transactionalEntityManager
+          .createQueryBuilder()
+          .update(TagEntity)
+          .set({
+            count: () => 'count + 1',
+          })
+          .where('tagId = ANY(:id)', {
+            id: tagIdArr,
+          })
+          .execute();
+        await transactionalEntityManager
+          .createQueryBuilder()
+          .update(ClassificationEntity)
+          .set({
+            count: () => 'count + 1',
+          })
+          .where('classificationId = :id', {
+            id: classificationId,
+          })
+          .execute();
+      },
+    );
+    // await this._articleRepository.save({
+    //   title,
+    //   classificationId,
+    //   tagId: tagIdArr,
+    //   status: ArticleStatus.ENABLE,
+    //   likeCount: 0,
+    //   dislikeCount: 0,
+    //   articleLink,
+    //   firstParagraph,
+    //   tag: tagEntityList,
+    // });
     return this._responseService.success({
       message: '创建文章成功',
+      data: res,
     });
   }
 

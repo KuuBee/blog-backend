@@ -12,8 +12,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { DateService } from '@app/lib/service/date.service';
+import { ArticleEntity } from './article.entity';
 
 export enum ClassificationStatus {
   ENABLE = 'enable',
@@ -60,4 +63,7 @@ export class ClassificationEntity {
     transformer: DateService.transformer(),
   })
   updatedAt: string;
+  //
+  @OneToMany(() => ArticleEntity, (article) => article.classification)
+  article: ArticleEntity[];
 }

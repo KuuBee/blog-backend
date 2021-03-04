@@ -16,6 +16,7 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
+  ManyToOne,
 } from 'typeorm';
 import { DateService } from '@app/lib/service/date.service';
 import { ClassificationEntity } from './classification.entity';
@@ -103,9 +104,14 @@ export class ArticleEntity {
 
   // 关系
   // 映射关系
-  @OneToOne(() => ClassificationEntity)
-  @JoinColumn({ name: 'classification_id' })
-  classification?: ClassificationEntity;
+  // @OneToOne(() => ClassificationEntity)
+  // @JoinColumn({ name: 'classification_id' })
+  // classification?: ClassificationEntity;
+  @ManyToOne(
+    () => ClassificationEntity,
+    (classification) => classification.article,
+  )
+  classification: ClassificationEntity;
   @OneToMany(() => CommentEntity, (comment) => comment.article)
   comment: CommentEntity[];
   @ManyToMany(() => TagEntity, (tag) => tag.article)
