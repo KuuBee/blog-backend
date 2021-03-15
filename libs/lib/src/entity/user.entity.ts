@@ -12,10 +12,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { DateService } from '@app/lib/service/date.service';
 import { ReplyEntity } from './reply.entity';
 import { CommentEntity } from './comment.entity';
+import { FriendLinkEntity } from './friend-link.entity';
 
 export enum UserStatus {
   ENABLE = 'enable',
@@ -37,9 +39,10 @@ export class UserEntity {
   @Column()
   avatar: string;
 
-  @Column()
-  // TODO
-  // 禁止select
+  @Column({
+    // 禁止默认select
+    select: false,
+  })
   password: string;
 
   @Column()
@@ -84,4 +87,6 @@ export class UserEntity {
   reply: ReplyEntity[];
   @OneToMany(() => CommentEntity, (comment) => comment.user)
   comment: CommentEntity[];
+  @OneToOne(() => FriendLinkEntity, (fl) => fl.user)
+  friendLink: FriendLinkEntity;
 }

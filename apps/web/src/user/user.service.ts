@@ -75,6 +75,7 @@ export class UserService {
     const insertOne = await this._userRepository.insert(createOne);
     // 创建完毕 生成token
     return this._responseService.success({
+      message: '注册成功！欢迎👏',
       data: this._libJwtService.createToken({
         ...createOne,
         userId: insertOne.identifiers[0].userId,

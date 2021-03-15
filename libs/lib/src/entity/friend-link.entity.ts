@@ -93,7 +93,7 @@ export class FriendLinkEntity {
 
   // 关系
 
-  @OneToOne(() => UserEntity)
+  @OneToOne(() => UserEntity, (u) => u.friendLink)
   @JoinColumn({
     name: 'user_id',
   })

@@ -1,6 +1,14 @@
 import { IndexFriendLinkDTO } from '@app/lib/dto/friend-link/index.dto';
 import { UpdatePartFriendLinkDTO } from '@app/lib/dto/friend-link/update.dto';
-import { Body, Controller, Get, Patch, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Patch,
+  Query,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FriendLinkService } from './friend-link.service';
 
@@ -16,7 +24,10 @@ export class FriendLinkController {
 
   @Patch()
   @UseGuards(AuthGuard('jwt'))
-  update(@Body() body: UpdatePartFriendLinkDTO) {
-    return this._riendLink.updatePart(body);
+  update(
+    @Body() body: UpdatePartFriendLinkDTO,
+    @Request() { user: { userId } },
+  ) {
+    return this._riendLink.updatePart(body, userId);
   }
 }

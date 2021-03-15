@@ -12,6 +12,8 @@ import { ArticleModule } from './article/article.module';
 import { SearchModule } from './search/search.module';
 import { FriendLinkModule } from './friend-link/friend-link.module';
 import { TokenModule } from './token/token.module';
+import { CommentModule } from './comment/comment.module';
+import { ReplyModule } from './reply/reply.module';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { TokenModule } from './token/token.module';
     SearchModule,
     FriendLinkModule,
     TokenModule,
+    CommentModule,
+    ReplyModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],

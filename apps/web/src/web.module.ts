@@ -15,6 +15,8 @@ import { TagModule } from './tag/tag.module';
 import { ClassificationModule } from './classification/classification.module';
 import { FriendLinkModule } from './friend-link/friend-link.module';
 import { TokenModule } from './token/token.module';
+import { CommentModule } from './comment/comment.module';
+import { ReplyModule } from './reply/reply.module';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { TokenModule } from './token/token.module';
         password: configService.get<string>('PASSWROD'),
         database: configService.get<string>('DB_NAME'),
         autoLoadEntities: true,
+        // synchronize: true,
+        // dropSchema: true,
       }),
       inject: [ConfigService],
     }),
@@ -39,6 +43,8 @@ import { TokenModule } from './token/token.module';
     ClassificationModule,
     FriendLinkModule,
     TokenModule,
+    CommentModule,
+    ReplyModule,
   ],
   controllers: [WebController],
   providers: [

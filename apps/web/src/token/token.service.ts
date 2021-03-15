@@ -17,9 +17,14 @@ export class TokenService {
   ) {}
 
   async create(body: CreateTokenDTO) {
-    const findOne = await this._userRepository.findOne({
-      name: body.name,
-    });
+    const findOne = await this._userRepository.findOne(
+      {
+        name: body.name,
+      },
+      {
+        select: ['name', 'password', 'userId'],
+      },
+    );
     if (findOne) {
       if (await bcrypt.compare(body.password, findOne.password)) {
         return this._response.success({

@@ -1,12 +1,13 @@
 import { IndexFriendLinkDTO } from '@app/lib/dto/friend-link/index.dto';
 import { UpdatePartFriendLinkDTO } from '@app/lib/dto/friend-link/update.dto';
 import { FriendLinkEntity } from '@app/lib/entity/friend-link.entity';
+import { UserEntity } from '@app/lib/entity/user.entity';
 import { PaginationService } from '@app/lib/service/pagination/pagination.service';
 import { ResponseService } from '@app/lib/service/response.service';
 import { UtilsService } from '@app/lib/service/utils.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { getConnection, Repository } from 'typeorm';
 
 @Injectable()
 export class FriendLinkService {
@@ -43,15 +44,36 @@ export class FriendLinkService {
   }
 
   // 更新部分
-  async updatePart(body: UpdatePartFriendLinkDTO) {
-    await this._repository
-      .createQueryBuilder()
-      .update(FriendLinkEntity)
-      .set(this._utils.omit(body, 'linkId'))
-      .where('linkId = :id', {
-        id: body.linkId,
-      })
-      .execute();
+  async updatePart(body: UpdatePartFriendLinkDTO, id: number) {
+    const { linkId } = body;
+    await getConnection().transaction(async (t) => {
+      await t
+        .createQueryBuilder()
+        .update(FriendLinkEntity)
+        .set(this._utils.omit(body, 'linkId'))
+        .where('linkId = :linkId', {
+          linkId,
+        })
+        .execute();
+      await t
+        .createQueryBuilder()
+        .update(UserEntity)
+        .set({
+          linkId,
+        })
+        .where('userId = :id', {
+          id,
+        })
+        .execute();
+    });
+    // await this._repository
+    //   .createQueryBuilder()
+    //   .update(FriendLinkEntity)
+    //   .set(this._utils.omit(body, 'linkId'))
+    //   .where('linkId = :id', {
+    //     id: body.linkId,
+    //   })
+    //   .execute();
     return this._response.success({
       message: '更新成功！',
     });

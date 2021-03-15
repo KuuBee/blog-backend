@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-03-02 15:31:00
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-03-02 17:01:14
+ * @LastEditTime: 2021-03-05 13:51:44
  */
 
 import {
@@ -26,6 +26,11 @@ export enum ReplyType {
   REPLY = 'reply',
   COMMENT = 'comment',
 }
+export enum ReplyStatus {
+  ENABLE = 'enable',
+  DISABLE = 'disable',
+  UNDER_ERVIEW = 'under_review',
+}
 
 @Entity({
   name: 'reply',
@@ -39,6 +44,14 @@ export class ReplyEntity {
   // 历史遗留问题就叫id了。。。
   // 不叫 replyId 的原因是和表内的 replyId 重复了
   id: number;
+
+  @Column({
+    type: 'int',
+    comment: '评论的文章id',
+    name: 'article_id',
+  })
+  // 这里不做关联 只是便于统计
+  articleId: number;
 
   @Column({
     type: 'int',
@@ -59,6 +72,7 @@ export class ReplyEntity {
     type: 'enum',
     enum: ReplyType,
     enumName: 'reply_type',
+    name: 'reply_type',
     comment: '回复类型，可能为评论回复和回复回复',
   })
   replyType: ReplyType;
@@ -91,6 +105,15 @@ export class ReplyEntity {
     nullable: true,
   })
   browser: string;
+
+  @Column({
+    type: 'enum',
+    enum: ReplyStatus,
+    enumName: 'reply_status',
+    name: 'status',
+    comment: '回复状态：启用，禁用，审核中',
+  })
+  status: ReplyStatus;
 
   @CreateDateColumn({
     name: 'created_at',

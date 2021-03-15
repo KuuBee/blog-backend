@@ -13,6 +13,7 @@ import { PaginationService } from './service/pagination/pagination.service';
 import { EnvService } from './service/env/env.service';
 import { SearchService } from './service/search/search.service';
 import { ALL_ENTITY } from './utils/entity';
+import { PushService } from './service/push/push.service';
 
 // TODO jwt密钥需要隐藏
 export const jwtSecretKey = 'secretKey2';
@@ -43,7 +44,7 @@ const SERVICE = [
 ];
 @Module({
   imports: [...MODULE],
-  providers: [...SERVICE],
+  providers: [...SERVICE, PushService],
   exports: [...SERVICE, ...MODULE],
 })
 export class LibModule {}

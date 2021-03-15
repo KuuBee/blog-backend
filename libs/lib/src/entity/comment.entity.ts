@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-01-15 16:12:57
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-03-02 17:03:30
+ * @LastEditTime: 2021-03-10 16:24:34
  */
 
 import {
@@ -57,7 +57,7 @@ export class CommentEntity {
     length: 3000,
     type: 'varchar',
   })
-  // 最多3k字节
+  // 最多3k字符
   content: string;
   @Column({
     name: 'os',
