@@ -47,4 +47,8 @@ export class UpdatePartFriendLinkDTO {
   @IsOptional()
   @IsEnum(FriendLinkStatus)
   status?: FriendLinkStatus;
+  @IsOptional()
+  @IsEnum(FriendLinkStatus)
+  // 旧的状态
+  oldStatus?: FriendLinkStatus;
 }

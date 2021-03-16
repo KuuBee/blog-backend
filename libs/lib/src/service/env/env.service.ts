@@ -10,4 +10,7 @@ export class EnvService {
   get isPron(): boolean {
     return !this.isDev;
   }
+  get<T = string>(key: string) {
+    return this._configService.get<T>(key);
+  }
 }

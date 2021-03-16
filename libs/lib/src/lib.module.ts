@@ -14,6 +14,7 @@ import { EnvService } from './service/env/env.service';
 import { SearchService } from './service/search/search.service';
 import { ALL_ENTITY } from './utils/entity';
 import { PushService } from './service/push/push.service';
+import { EmailService } from './service/email/email.service';
 
 // TODO jwt密钥需要隐藏
 export const jwtSecretKey = 'secretKey2';
@@ -41,10 +42,12 @@ const SERVICE = [
   PaginationService,
   EnvService,
   SearchService,
+  PushService,
+  EmailService,
 ];
 @Module({
   imports: [...MODULE],
-  providers: [...SERVICE, PushService],
+  providers: [...SERVICE],
   exports: [...SERVICE, ...MODULE],
 })
 export class LibModule {}
