@@ -3,12 +3,13 @@
  * @Author: KuuBee
  * @Date: 2021-01-26 11:46:32
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-01-27 15:31:54
+ * @LastEditTime: 2021-03-17 11:30:14
  */
 import { Injectable } from '@nestjs/common';
 import crypto from 'crypto';
 import fs from 'fs';
 import NodeRSA from 'node-rsa';
+import { EnvService } from '../env/env.service';
 
 export namespace CryptoServiceType {
   export interface SecretKey {
@@ -19,17 +20,14 @@ export namespace CryptoServiceType {
 
 @Injectable()
 export class CryptoService {
+  constructor(private _env: EnvService) {}
   // 公钥文件
   private get _publicKeyStr() {
-    return fs.readFileSync(
-      '/Users/kuubee/Desktop/test-demo/shell/rsa_public_key.pem',
-    );
+    return fs.readFileSync(this._env.get('RSA_PUBLIC_KEY'));
   }
   // 私钥文件
   private get _privateKeyStr() {
-    return fs.readFileSync(
-      '/Users/kuubee/Desktop/test-demo/shell/pkcs8_rsa_private_key.pem',
-    );
+    return fs.readFileSync(this._env.get('PKCS8_RSA_PRIVATE_KEY'));
   }
   // rsa公钥
   private get _rsaPublicKey() {
