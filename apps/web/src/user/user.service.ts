@@ -24,19 +24,6 @@ export class UserService {
     private _libJwtService: LibJwtService,
   ) {}
   testId = 0;
-
-  // TODO 需要删除
-  async findAll() {
-    const data = await this._userRepository.find();
-    return this._responseService.success({
-      data,
-    });
-  }
-  // TODO 需要删除
-  findOne(id: string): Promise<UserEntity> {
-    return this._userRepository.findOne(id);
-  }
-
   // 创建
   async create(body: CreateUserDTO, file: GlobalType.UploadFile) {
     const findOne = await this._userRepository
@@ -81,13 +68,5 @@ export class UserService {
         userId: insertOne.identifiers[0].userId,
       } as UserEntity),
     });
-  }
-
-  // TODO 需要删除
-  async update(id: number) {
-    const updateOne = await this._userRepository.findOne(id);
-    updateOne.name = 'test4' + this.testId;
-    this.testId += 1;
-    return await this._userRepository.save(updateOne);
   }
 }

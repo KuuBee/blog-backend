@@ -4,6 +4,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { UserEntity } from '../entity/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { jwtSecretKey } from '..';
+import { EnvService } from './env/env.service';
 
 export interface JwtValidateInfo {
   userId: number;
@@ -12,12 +13,12 @@ export interface JwtValidateInfo {
 
 @Injectable()
 export class LibJwtService extends PassportStrategy(Strategy) {
-  constructor(private _jwtService: JwtService) {
+  constructor(private _jwtService: JwtService, private _env: EnvService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       // TODO 修改密钥值环境变量
-      secretOrKey: jwtSecretKey,
+      secretOrKey: _env.get('JWT_SECRET_KEY'),
     });
   }
 
@@ -27,7 +28,6 @@ export class LibJwtService extends PassportStrategy(Strategy) {
    * @return {boolean}
    */
   async validate(payload: any): Promise<JwtValidateInfo> {
-    // TODO 增加token缓存
     // 为了实现登陆更新token的问题
     // 如果token解码成功就会走到这里
     return { userId: payload.sub, username: payload.username };

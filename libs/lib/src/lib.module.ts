@@ -4,7 +4,7 @@ import { LibService } from './lib.service';
 import { DateService } from './service/date.service';
 import { ResponseService } from './service/response.service';
 import { LibJwtService } from './service/jwt.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UtilsService } from './service/utils.service';
 import { JwtModule } from '@nestjs/jwt';
 import { CryptoService } from './service/crypto/crypto.service';
@@ -23,11 +23,18 @@ const MODULE = [
   ConfigModule.forRoot({
     envFilePath: path.normalize(__dirname + '../../../../.env'),
   }),
-  JwtModule.register({
-    secret: jwtSecretKey,
-    signOptions: {
-      expiresIn: '60 days',
-    },
+  // JwtModule.register({
+  //   secret: jwtSecretKey,
+  //   signOptions: {
+  //     expiresIn: '60 days',
+  //   },
+  // }),
+  JwtModule.registerAsync({
+    imports: [ConfigModule],
+    useFactory: (config: ConfigService) => ({
+      secret: config.get('JWT_SECRET_KEY'),
+    }),
+    inject: [ConfigService],
   }),
   ...ALL_ENTITY,
 ];

@@ -15,9 +15,14 @@ export class TokenService {
     private _jwt: LibJwtService,
   ) {}
   async create(data: CreateTokenDTO) {
-    const findOne = await this._repository.findOne({
-      name: data.name,
-    });
+    const findOne = await this._repository.findOne(
+      {
+        name: data.name,
+      },
+      {
+        select: ['level', 'userId', 'password'],
+      },
+    );
     if (findOne) {
       if (findOne.level !== 200)
         return this._response.error({

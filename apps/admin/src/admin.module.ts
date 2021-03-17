@@ -28,6 +28,7 @@ import { ReplyModule } from './reply/reply.module';
         password: configService.get<string>('PASSWROD'),
         database: configService.get<string>('DB_NAME'),
         autoLoadEntities: true,
+        synchronize: false,
       }),
       inject: [ConfigService],
     }),
