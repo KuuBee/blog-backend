@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-01-26 11:46:32
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-03-17 11:30:14
+ * @LastEditTime: 2021-03-17 14:32:02
  */
 import { Injectable } from '@nestjs/common';
 import crypto from 'crypto';
@@ -59,6 +59,8 @@ export class CryptoService {
    * @return {string} 明文
    */
   rsaDecrypto(code: string): string {
+    console.log(code);
+
     try {
       return this._rsaPrivateKey.decrypt(code, 'utf8');
     } catch (error) {

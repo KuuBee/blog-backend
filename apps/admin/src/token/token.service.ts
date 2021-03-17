@@ -20,7 +20,7 @@ export class TokenService {
         name: data.name,
       },
       {
-        select: ['level', 'userId', 'password'],
+        select: ['level', 'userId', 'password', 'name', 'email', 'avatar'],
       },
     );
     if (findOne) {
@@ -30,10 +30,14 @@ export class TokenService {
           message: '没权限嗨搁着给爷登陆呢？给爷爬！',
         });
       if (await bcrypt.compare(data.password, findOne.password)) {
+        const { userId, name, email, avatar } = findOne;
         return this._response.success({
           data: {
             ...this._jwt.createToken(findOne),
-            userId: findOne.userId,
+            userId,
+            name,
+            email,
+            avatar,
           },
         });
       }
