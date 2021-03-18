@@ -22,7 +22,7 @@ export class TokenService {
         name: body.name,
       },
       {
-        select: ['name', 'password', 'userId'],
+        select: ['name', 'password', 'userId', 'avatar'],
       },
     );
     if (findOne) {
