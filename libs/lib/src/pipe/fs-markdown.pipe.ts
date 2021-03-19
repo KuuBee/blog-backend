@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-02-08 14:58:47
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-02-19 11:37:46
+ * @LastEditTime: 2021-03-19 16:43:04
  */
 
 import { Transform, TransformOptions } from 'stream';
@@ -21,12 +21,13 @@ export class ImageUrlTransformPipe extends Transform {
       const buffer = Buffer.from(chunk, encoding);
       res = buffer.toString('utf-8');
     }
-    const findArr = res.match(/(?<=!\[.*\]\().*(?=\))/g);
-    if (!findArr.length) {
+    const findArr: RegExpMatchArray | null = res.match(
+      /(?<=!\[.*\]\().*(?=\))/g,
+    );
+    if (!findArr?.length) {
       this.push(res, 'utf-8');
       return callback();
     }
-    console.log(findArr);
 
     Array.from(
       new Set(findArr.filter((item) => !item.includes('http'))),
