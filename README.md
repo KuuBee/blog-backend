@@ -2,7 +2,7 @@
 
 这是一个基于 [Nestjs](https://github.com/nestjs/nest) 和 [Postgres](https://github.com/postgres/postgres) 开发的博客后端。
 
-项目采用了**`monorepo`**模式管理目录结构，单个项目内包含了blog端和blog-admin端的api。
+项目采用了`monorepo`模式管理目录结构，单个项目内包含了blog端和blog-admin端的api。
 
 ## 配套
 
@@ -10,7 +10,7 @@
 
   基于 [Angular](https://github.com/angular/angular) 和 [Material](https://github.com/angular/material) 开发的博客系统后台。
 
-- [blog后台](https://github.com/KuuBee/blog-backend)
+- [blog后台](https://github.com/KuuBee/blog-admin)
 
   基于 [Angular](https://github.com/angular/angular)、[ng-matero](https://github.com/ng-matero/ng-matero)  和 [Material](https://github.com/angular/material) 开发的博客系统后台。
 
