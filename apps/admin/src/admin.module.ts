@@ -28,7 +28,12 @@ import { ReplyModule } from './reply/reply.module';
         password: configService.get<string>('PASSWROD'),
         database: configService.get<string>('DB_NAME'),
         autoLoadEntities: true,
-        synchronize: false,
+        // 您可以通过 一下配置自动初始化数据库
+        // ⚠️请不要在生产环境中使用！
+        // 更新数据库结构
+        // synchronize: true,
+        // 抛弃所有数据
+        // dropSchema: true,
       }),
       inject: [ConfigService],
     }),

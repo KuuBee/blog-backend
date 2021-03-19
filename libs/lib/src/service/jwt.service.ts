@@ -3,7 +3,6 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { UserEntity } from '../entity/user.entity';
 import { JwtService } from '@nestjs/jwt';
-import { jwtSecretKey } from '..';
 import { EnvService } from './env/env.service';
 
 export interface JwtValidateInfo {

@@ -1,77 +1,57 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# 个人博客后端
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+这是一个基于 [Nestjs](https://github.com/nestjs/nest) 和 [Postgres](https://github.com/postgres/postgres) 开发的博客后端。
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+项目采用了**`monorepo`**模式管理目录结构，单个项目内包含了blog端和blog-admin端的api。
 
-## Description
+## 配套
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [blog前台](https://github.com/KuuBee/blog)
 
-## Installation
+  基于 [Angular](https://github.com/angular/angular) 和 [Material](https://github.com/angular/material) 开发的博客系统后台。
 
-```bash
-$ npm install
-```
+- [blog后台](https://github.com/KuuBee/blog-backend)
 
-## Running the app
+  基于 [Angular](https://github.com/angular/angular)、[ng-matero](https://github.com/ng-matero/ng-matero)  和 [Material](https://github.com/angular/material) 开发的博客系统后台。
 
-```bash
-# development
-$ npm run start
+## 环境
 
-# watch mode
-$ npm run start:dev
+- **Nodejs**
 
-# production mode
-$ npm run start:prod
-```
+  需要 Node.js 的[当前版、活跃 LTS 版或维护期 LTS版](https://nodejs.org/about/releases)。
 
-## Test
+- **npm**
 
-```bash
-# unit tests
-$ npm run test
+  检查您是否安装了npm客户端，请在终端允许 `npm -v`。
 
-# e2e tests
-$ npm run test:e2e
+- **Nestjs**
 
-# test coverage
-$ npm run test:cov
-```
+  您可以参考[这里](https://docs.nestjs.com/)来安装Nestjs。
+  
+- **Postgres**
 
-## Support
+  您可以参考[这里](https://www.postgresql.org/download/)来安装Postgres。
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## 使用
 
-## Stay in touch
+进入目录 `npm i`。
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+您可以通过 `npm run start:admin`开启本地admin服务。
 
-## License
+通过 `npm run start:web`开启本地blog服务。
 
-Nest is [MIT licensed](LICENSE).
+# 异常
 
-### 检测循环依赖
+如果有问题或者疑问，欢迎在issues进行提问。
 
-`npx madge --circular --extensions ts ./`
+如果这个项目对您有帮助，欢迎star，这也是对作者的一种鼓励。
+
+
+# 致谢
+
+感谢每一个给我提供意见和建议的小伙伴 ;-)。
+
+# License
+
+遵循 MIT 许可证。有关详细,请参阅 [LICENSE](https://github.com/qiubaiying/qiubaiying.github.io/blob/master/LICENSE)。
+

@@ -16,19 +16,13 @@ import { ALL_ENTITY } from './utils/entity';
 import { PushService } from './service/push/push.service';
 import { EmailService } from './service/email/email.service';
 
-// TODO jwt密钥需要隐藏
-export const jwtSecretKey = 'secretKey2';
+// 检测循环依赖
+// `npx madge --circular --extensions ts ./`
 
 const MODULE = [
   ConfigModule.forRoot({
     envFilePath: path.normalize(__dirname + '../../../../.env'),
   }),
-  // JwtModule.register({
-  //   secret: jwtSecretKey,
-  //   signOptions: {
-  //     expiresIn: '60 days',
-  //   },
-  // }),
   JwtModule.registerAsync({
     imports: [ConfigModule],
     useFactory: (config: ConfigService) => ({
