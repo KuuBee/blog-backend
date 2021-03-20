@@ -10,6 +10,7 @@ import {
 } from '@app/lib/entity/reply.entity';
 import { UserEntity } from '@app/lib/entity/user.entity';
 import { ResponseService } from '@app/lib/service/response.service';
+import { XssService } from '@app/lib/service/xss/xss.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -20,6 +21,7 @@ export class ReplyService {
     private _response: ResponseService,
     @InjectRepository(ReplyEntity)
     private _repository: Repository<ReplyEntity>,
+    private _xss: XssService,
   ) {}
 
   async create(body: CreateReplyDTO, userId: number) {
@@ -34,6 +36,7 @@ export class ReplyService {
     await this._repository.save({
       ...body,
       userId,
+      content: this._xss.filterXSS(body.content),
       status: ReplyStatus.ENABLE,
     });
     return this._response.success({

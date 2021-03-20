@@ -6,9 +6,9 @@ import {
 } from '@app/lib/entity/friend-link.entity';
 import { ReplyEntity } from '@app/lib/entity/reply.entity';
 import { ResponseService } from '@app/lib/service/response.service';
+import { XssService } from '@app/lib/service/xss/xss.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { retry } from 'rxjs/operators';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -17,6 +17,7 @@ export class CommentService {
     private _response: ResponseService,
     @InjectRepository(CommentEntity)
     private _repository: Repository<CommentEntity>,
+    private _xss: XssService,
   ) {}
   async create(body: CreateCommentDTO, userId: number) {
     const [, count] = await this._repository.findAndCount({
@@ -31,6 +32,7 @@ export class CommentService {
     await this._repository.save({
       ...body,
       userId,
+      content: this._xss.filterXSS(body.content),
       status: CommentStatus.ENABLE,
     });
     return this._response.success({
@@ -40,16 +42,6 @@ export class CommentService {
   }
 
   async index(id: number) {
-    // const data = await this._repository.find({
-    //   select: ['commentId', 'content', 'os', 'browser', 'user'],
-    //   where: {
-    //     status: CommentStatus.ENABLE,
-    //   },
-    //   order: {
-    //     createdAt: 'DESC',
-    //   },
-    //   relations: ['user'],
-    // });
     const data = await this._repository
       .createQueryBuilder('comment')
       .select([

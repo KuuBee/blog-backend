@@ -52,7 +52,8 @@
     "rxjs": "^6.6.6",
     "swagger-ui-express": "^4.1.6",
     "typeorm": "^0.2.31",
-    "web-push": "^3.4.4"
+    "web-push": "^3.4.4",
+    "xss": "^1.0.8"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.5.6",

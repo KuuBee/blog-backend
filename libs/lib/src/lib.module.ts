@@ -15,6 +15,7 @@ import { SearchService } from './service/search/search.service';
 import { ALL_ENTITY } from './utils/entity';
 import { PushService } from './service/push/push.service';
 import { EmailService } from './service/email/email.service';
+import { XssService } from './service/xss/xss.service';
 
 // 检测循环依赖
 // `npx madge --circular --extensions ts ./`
@@ -45,6 +46,7 @@ const SERVICE = [
   SearchService,
   PushService,
   EmailService,
+  XssService,
 ];
 @Module({
   imports: [...MODULE],
