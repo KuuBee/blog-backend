@@ -17,7 +17,7 @@ import { FriendLinkModule } from './friend-link/friend-link.module';
 import { TokenModule } from './token/token.module';
 import { CommentModule } from './comment/comment.module';
 import { ReplyModule } from './reply/reply.module';
-import { UtilsModule } from './utils/utils.module';
+import { RpcModule } from './rpc/rpc.module';
 
 @Module({
   imports: [
@@ -50,7 +50,7 @@ import { UtilsModule } from './utils/utils.module';
     TokenModule,
     CommentModule,
     ReplyModule,
-    UtilsModule,
+    RpcModule,
   ],
   controllers: [WebController],
   providers: [
