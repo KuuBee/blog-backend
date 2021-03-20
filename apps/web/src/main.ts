@@ -7,15 +7,14 @@ import dayjs from 'dayjs';
 import isLeapYear from 'dayjs/plugin/isLeapYear'; // 导入插件
 import 'dayjs/locale/zh-cn'; // 导入本地化语言
 import { HttpExceptionFilter } from '@app/lib/filter/http-exception.filter';
-import { LoggingInterceptor } from '@app/lib/interceptor/logging.interceptor';
+import helmet from 'helmet';
 
 async function bootstrap() {
-  const app = await NestFactory.create(WebModule, {
-    cors: {
-      origin: '*',
-      methods: '*',
-    },
+  const app = await NestFactory.create(WebModule);
+  app.enableCors({
+    origin: true,
   });
+  app.use(helmet());
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('/api/blog');
   app.useGlobalFilters(new HttpExceptionFilter());
