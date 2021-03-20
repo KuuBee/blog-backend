@@ -11,9 +11,9 @@ export class RpcService {
   constructor(
     @InjectRepository(ArticleEntity)
     private _article: Repository<ArticleEntity>,
-    @InjectRepository(ArticleEntity)
+    @InjectRepository(TagEntity)
     private _tag: Repository<TagEntity>,
-    @InjectRepository(ArticleEntity)
+    @InjectRepository(ClassificationEntity)
     private _class: Repository<ClassificationEntity>,
     private _responseService: ResponseService,
   ) {}
