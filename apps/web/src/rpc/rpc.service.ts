@@ -25,9 +25,23 @@ export class RpcService {
     const [, articleCount] = await this._article.findAndCount();
     return this._responseService.success({
       data: {
-        tagCount,
-        classCount,
-        articleCount,
+        tag: [
+          {
+            icon: 'article',
+            tips: '文章',
+            count: articleCount,
+          },
+          {
+            icon: 'class',
+            tips: '分类',
+            count: classCount,
+          },
+          {
+            icon: 'tag',
+            tips: '标签',
+            count: tagCount,
+          },
+        ],
       },
     });
   }
