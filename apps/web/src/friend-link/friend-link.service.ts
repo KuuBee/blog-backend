@@ -31,10 +31,12 @@ export class FriendLinkService {
       ...body,
       status: FriendLinkStatus.UNDER_ERVIEW,
     });
+    // 您的后台地址
+    const BACKEND_URL = 'https://autocode.icu/admin/friend-link/index';
     // 异步
     this._email.send({
       html: `
-      有新的小伙伴申请友链啦，快去<a href="https://autocode.icu/admin/friend-link/index" target="_blank">后台</a>康康吧！
+      有新的小伙伴申请友链啦，快去<a href="${BACKEND_URL}" target="_blank">后台</a>康康吧！
       `,
       subject: '有新的友链',
       to: this._email.rootEmail,
