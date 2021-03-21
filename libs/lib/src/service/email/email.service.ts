@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-03-15 17:39:03
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-03-15 18:19:10
+ * @LastEditTime: 2021-03-21 13:38:45
  */
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
@@ -24,13 +24,19 @@ export class EmailService {
     });
   }
   transport: nodemailer.Transporter;
+
+  get rootEmail(): string {
+    return this._env.get('ROOT_EMAIL');
+  }
+
   async send(data: EmailContentType) {
-    await this.transport.sendMail(this.generateEmailContent(data));
+    await this.transport.sendMail(this._generateEmailContent(data));
   }
-  async sendTest() {
-    // const;
-  }
-  generateEmailContent({ html, subject, to }: EmailContentType): Mail.Options {
+  private _generateEmailContent({
+    html,
+    subject,
+    to,
+  }: EmailContentType): Mail.Options {
     return {
       // 发件人 邮箱
       from: {

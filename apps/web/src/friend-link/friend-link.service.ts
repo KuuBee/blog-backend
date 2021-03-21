@@ -3,6 +3,7 @@ import {
   FriendLinkEntity,
   FriendLinkStatus,
 } from '@app/lib/entity/friend-link.entity';
+import { EmailService } from '@app/lib/service/email/email.service';
 import { JwtValidateInfo } from '@app/lib/service/jwt.service';
 import { ResponseService } from '@app/lib/service/response.service';
 import { Injectable } from '@nestjs/common';
@@ -15,6 +16,7 @@ export class FriendLinkService {
     private _response: ResponseService,
     @InjectRepository(FriendLinkEntity)
     private _repository: Repository<FriendLinkEntity>,
+    private _email: EmailService,
   ) {}
   async create(body: CreateFriendLinkDTO, { userId }: JwtValidateInfo) {
     const [, count] = await this._repository.findAndCount({
@@ -28,6 +30,14 @@ export class FriendLinkService {
       userId,
       ...body,
       status: FriendLinkStatus.UNDER_ERVIEW,
+    });
+    // 异步
+    this._email.send({
+      html: `
+      有新的小伙伴申请友链啦，快去<a href="https://autocode.icu/admin/friend-link/index" target="_blank">后台</a>康康吧！
+      `,
+      subject: '有新的友链',
+      to: this._email.rootEmail,
     });
     return this._response.success({
       message: '申请已经提交啦，通过会有邮件提醒哦',
