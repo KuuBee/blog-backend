@@ -1,4 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
+import { GetArticlePageContextDTO } from '@app/lib/dto/rpc/getArticlePageContext.dto';
+import { Controller, Get, Query } from '@nestjs/common';
 import { RpcService } from './rpc.service';
 /* 
 RPC 风格的api放在此处
@@ -10,5 +11,10 @@ export class RpcController {
   @Get('getBlogInfo')
   getBlogInfo() {
     return this._rpc.getBlogInfo();
+  }
+
+  @Get('getArticlePageContext')
+  getArticlePageContext(@Query() { id }: GetArticlePageContextDTO) {
+    return this._rpc.getArticlePageContext(parseInt(id));
   }
 }
