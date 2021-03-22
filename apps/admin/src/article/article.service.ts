@@ -217,7 +217,7 @@ export class ArticleService {
     let mdFileName: string;
     // 默认替换图片地址
     const imageReplaceUrl = this._envService.isDev
-      ? `file:///Users/kuubee/Desktop/self_porject/node/blog/static/markdown/${timestamp}/`
+      ? `file://Users/kuubee/Desktop/self_porject/node/blog/static/markdown/${timestamp}/`
       : `https:\/\/autocode.icu/assets/markdown/${timestamp}/`;
     // 默认md根目录
     const mdPath = this._envService.isDev
@@ -295,8 +295,13 @@ export class ArticleService {
       await fsP.unlink(baseMdPath);
       // 文件夹重命名
       execSync(`mv ${uncompressMdPath} ${saveMdPath}`);
+      console.log(
+        'path.join(imageReplaceUrl, `./index.md`)\n',
+        imageReplaceUrl + '/index.md',
+      );
+
       return {
-        path: path.join(imageReplaceUrl, `./index.md`),
+        path: `${imageReplaceUrl}index.md`,
         firstParagraph: selectParagraphPipe.firstParagraph,
       };
     } catch (error) {
