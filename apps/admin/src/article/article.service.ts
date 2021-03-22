@@ -295,11 +295,6 @@ export class ArticleService {
       await fsP.unlink(baseMdPath);
       // 文件夹重命名
       execSync(`mv ${uncompressMdPath} ${saveMdPath}`);
-      console.log(
-        'path.join(imageReplaceUrl, `./index.md`)\n',
-        imageReplaceUrl + '/index.md',
-      );
-
       return {
         path: `${imageReplaceUrl}index.md`,
         firstParagraph: selectParagraphPipe.firstParagraph,
