@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-02-08 14:58:47
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-04-03 16:28:45
+ * @LastEditTime: 2021-04-03 16:55:57
  */
 
 import { Transform, TransformOptions } from 'stream';
@@ -36,7 +36,7 @@ export class ImageUrlTransformPipe extends Transform {
       res = res.replace(
         item,
         `${this._baseUrl}${
-          item.match(/(?<=\/)[^\/]*\.(jpg|png|jpge|gif)/) ?? item
+          item.match(/(?<=\/)[^\/]*\.(jpg|png|jpge|gif)/)?.[0] ?? item
         }`,
       );
     });
