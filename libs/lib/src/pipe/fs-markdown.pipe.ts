@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-02-08 14:58:47
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-03-19 16:43:04
+ * @LastEditTime: 2021-04-03 16:28:45
  */
 
 import { Transform, TransformOptions } from 'stream';
@@ -29,13 +29,14 @@ export class ImageUrlTransformPipe extends Transform {
       return callback();
     }
 
+    // 讲不包含 http 的图片全部转为 ./xxx.xxx 的形式
     Array.from(
       new Set(findArr.filter((item) => !item.includes('http'))),
     ).forEach((item) => {
       res = res.replace(
         item,
         `${this._baseUrl}${
-          item.match(/(?<=\/)[A-Za-z0-9\u4e00-\u9fa5]*\.(jpg|png|jpge|gif)/)[0]
+          item.match(/(?<=\/)[^\/]*\.(jpg|png|jpge|gif)/) ?? item
         }`,
       );
     });

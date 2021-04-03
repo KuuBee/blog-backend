@@ -252,8 +252,14 @@ export class ArticleService {
       for await (const dirent of uncompressDir) {
         const name = dirent.name;
         if (name.match(/\.md$/)) {
+          console.log('dirent', dirent);
+
           // 获取md文件名称
           mdFileName = name;
+          if (mdFileName === 'index.md')
+            throw this._responseService.error({
+              message: '上传的md文件不能叫做index.md',
+            });
           break;
         }
       }
