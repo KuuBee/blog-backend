@@ -3,7 +3,7 @@
  * @Author: KuuBee
  * @Date: 2021-02-19 13:40:19
  * @LastEditors: KuuBee
- * @LastEditTime: 2021-02-19 14:39:52
+ * @LastEditTime: 2021-04-06 15:38:22
  */
 import { Transform } from 'stream';
 
@@ -21,14 +21,27 @@ export class SelectParagraphPipe extends Transform {
       res = buffer.toString('utf-8');
     }
     if (!this._firstParagraph) {
-      const matchRes = res.match(
-        /\n[1-9a-zA-Z\u4e00-\u9fa5].*[1-9a-zA-Z\u4e00-\u9fa5]/,
-      );
-      const matchContent = matchRes[0];
-      const matchIndex = matchRes['index'];
-      this._firstParagraph = `${res.substring(0, matchIndex)}${matchContent}`;
+      this._selectFirstParagraph(res);
     }
     this.push(res, 'utf-8');
     callback();
+  }
+  // 筛选第一段
+  private _selectFirstParagraph(text: string) {
+    let falg = true;
+    while (falg) {
+      text = text.replace(/(^.*\n.*)/, (_match, p1) => {
+        // 如果当前 p1 内有 #标题 并且 _firstParagraph 内部已经有了标题是 就中断
+        if (
+          this._firstParagraph.match(/\n#+\s\S*\n/) &&
+          p1.match(/\n?#+\s\S*\n?/)
+        ) {
+          falg = false;
+          return '';
+        }
+        this._firstParagraph += p1;
+        return '';
+      });
+    }
   }
 }
