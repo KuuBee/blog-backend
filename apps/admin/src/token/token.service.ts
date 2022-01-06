@@ -23,13 +23,15 @@ export class TokenService {
         select: ['level', 'userId', 'password', 'name', 'email', 'avatar'],
       },
     );
+    console.log(findOne);
+
     if (findOne) {
-      if (findOne.level !== 200)
-        return this._response.error({
-          code: HttpStatus.FORBIDDEN,
-          message: '没权限嗨搁着给爷登陆呢？给爷爬！',
-        });
       if (await bcrypt.compare(data.password, findOne.password)) {
+        if (findOne.level !== 200)
+          return this._response.error({
+            code: HttpStatus.FORBIDDEN,
+            message: '没权限嗨搁着给爷登陆呢？给爷爬！',
+          });
         const { userId, name, email, avatar } = findOne;
         return this._response.success({
           data: {

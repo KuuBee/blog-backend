@@ -63,7 +63,7 @@ export class ArticleService {
 
   async create(
     file: GlobalType.UploadFile,
-    { title, classificationId, tagId }: CreateArticleDTO,
+    { title, classificationId, tagId, introduction }: CreateArticleDTO,
   ) {
     const [, count] = await this._articleRepository.findAndCount({
       title,
@@ -72,6 +72,7 @@ export class ArticleService {
       return this._responseService.error({
         message: '标题重复！',
       });
+    // TODO 首段 这个功能暂时废弃了 等简介功能稳定后删除
     const { path: articleLink, firstParagraph } = await this._uploadMarkdown(
       file,
     );
@@ -95,27 +96,11 @@ export class ArticleService {
           likeCount: 0,
           dislikeCount: 0,
           articleLink,
-          firstParagraph,
+          firstParagraph: '',
           tag: tagEntityList,
           classification: classEntity,
+          introduction,
         });
-        // await transactionalEntityManager
-        //   .createQueryBuilder()
-        //   .insert()
-        //   .into(ArticleEntity)
-        //   .values({
-        //     title,
-        //     classificationId,
-        //     tagId: tagIdArr,
-        //     status: ArticleStatus.ENABLE,
-        //     likeCount: 0,
-        //     dislikeCount: 0,
-        //     articleLink,
-        //     firstParagraph,
-        //     tag: tagEntityList,
-        //     classification: classEntity,
-        //   })
-        //   .execute();
         await transactionalEntityManager
           .createQueryBuilder()
           .update(TagEntity)
@@ -138,17 +123,6 @@ export class ArticleService {
           .execute();
       },
     );
-    // await this._articleRepository.save({
-    //   title,
-    //   classificationId,
-    //   tagId: tagIdArr,
-    //   status: ArticleStatus.ENABLE,
-    //   likeCount: 0,
-    //   dislikeCount: 0,
-    //   articleLink,
-    //   firstParagraph,
-    //   tag: tagEntityList,
-    // });
     return this._responseService.success({
       message: '创建文章成功',
       data: res,
@@ -165,7 +139,7 @@ export class ArticleService {
   async update(
     file: GlobalType.UploadFile,
     articleId: number,
-    { title, tagId, classificationId }: UpdateArticleDTO,
+    { title, tagId, classificationId, introduction }: UpdateArticleDTO,
   ) {
     const findOne = await this._articleRepository.findOne(articleId);
     if (!findOne)
@@ -176,6 +150,7 @@ export class ArticleService {
         })
       );
     const { articleLink: oldArticleLink } = findOne;
+    // TODO 首段 这个功能暂时废弃了 等简介功能稳定后删除
     const { path: newArticleLink, firstParagraph } = await this._uploadMarkdown(
       file,
     );
@@ -188,7 +163,8 @@ export class ArticleService {
       // likeCount: 0,
       // dislikeCount: 0,
       articleLink: newArticleLink,
-      firstParagraph,
+      firstParagraph: '',
+      introduction,
     };
     await this._articleRepository
       .createQueryBuilder()
@@ -196,6 +172,8 @@ export class ArticleService {
       .set(newArticle)
       .where('articleId = :id', { id: articleId })
       .execute();
+    console.log(oldArticleLink);
+
     const oldMdPath = oldArticleLink.match(/\/markdown\/[0-9]*/);
     const defaultMdPath = this._envService.isDev
       ? `/Users/kuubee/Desktop/self_porject/node/blog/static${oldMdPath}`
@@ -217,14 +195,12 @@ export class ArticleService {
     let mdFileName: string;
     // 默认替换图片地址
     const imageReplaceUrl = this._envService.isDev
-      ? `file://Users/kuubee/Desktop/self_porject/node/blog/static/markdown/${timestamp}/`
+      ? `http://127.0.0.1:9889/${timestamp}/markdown/`
       : `https:\/\/autocode.icu/assets/markdown/${timestamp}/`;
     // 默认md根目录
     const mdPath = this._envService.isDev
-      ? // 开发目录
-        path.resolve(__dirname, '../../../', './static/markdown')
-      : // 服务器目录
-        '/home/assets/markdown';
+      ? path.resolve(__dirname, '../../../', './static/markdown') // 开发目录
+      : '/home/assets/markdown'; // 服务器目录
     // 当前md的文件夹路径
     const uncompressMdPath = path.resolve(mdPath, `./${dirName}`);
     // 实际存的文件夹路径

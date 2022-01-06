@@ -7,13 +7,10 @@
  */
 
 import {
-  ArrayMinSize,
-  IsArray,
   IsJSON,
   IsNotEmpty,
   IsNumberString,
   IsString,
-  Min,
   MinLength,
 } from 'class-validator';
 
@@ -28,4 +25,7 @@ export class UpdateArticleDTO {
   @IsJSON()
   @MinLength(3)
   tagId: string;
+  @IsNotEmpty()
+  @IsString()
+  introduction: string;
 }

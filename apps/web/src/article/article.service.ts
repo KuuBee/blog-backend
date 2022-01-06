@@ -31,6 +31,7 @@ export class ArticleService {
         'article.firstParagraph',
         'article.createdAt',
         'article.updatedAt',
+        'article.introduction',
       ])
       .innerJoin('article.classification', 'classification')
       .where('article.status = :status', {
@@ -68,6 +69,7 @@ export class ArticleService {
         'article.tagId',
         'article.createdAt',
         'article.updatedAt',
+        'article.introduction',
       ])
       .innerJoin('article.classification', 'classification')
       .where(`article.articleId = :id`, {

@@ -6,13 +6,7 @@
  * @LastEditTime: 2021-02-12 11:16:13
  */
 
-import {
-  ArrayMinSize,
-  IsArray,
-  IsNotEmpty,
-  IsNumberString,
-  IsString,
-} from 'class-validator';
+import { IsNotEmpty, IsNumberString, IsString } from 'class-validator';
 
 export class CreateArticleDTO {
   @IsNotEmpty()
@@ -24,4 +18,7 @@ export class CreateArticleDTO {
   @IsNotEmpty()
   // @IsArray()
   tagId: string;
+  @IsNotEmpty()
+  @IsString()
+  introduction: string;
 }

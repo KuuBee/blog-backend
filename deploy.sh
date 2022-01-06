@@ -7,7 +7,7 @@ git pull github main
 npm i
 npm run build:web
 npm run build:admin
-pm2 reload ecosystem.config.js --env production
+pm2 reload ecosystem.config.js
 exit
 EOF
 echo 部署完成

@@ -87,6 +87,13 @@ export class ArticleEntity {
   })
   dislikeCount: number;
 
+  @Column({
+    name: 'introduction',
+    type: 'varchar',
+    length: 3000,
+  })
+  introduction: string;
+
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamptz',
